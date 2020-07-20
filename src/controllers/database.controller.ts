@@ -24,7 +24,6 @@ export class databaseController extends Controller {
     public async getOne(id: string) : Promise<any[]> {
         try {
             let item: any = await databaseModel.findOne({_id: id});
-            item.password = "";
             return item;
         } catch (err) {
             this.setStatus(500);
@@ -35,13 +34,11 @@ export class databaseController extends Controller {
     @Post('/database')
     public async create(@BodyProp('tag') tag: string,
      @BodyProp('setTft') setTft: string,
-     @BodyProp('data') data: string,
-     @BodyProp('deletedAt') deletedAt: Date ): Promise<any> {
+     @BodyProp('data') data: string ): Promise<any> {
         const item = new databaseModel({
           tag: tag,
           setTft: setTft,
-          data: data,
-          deletedAt: deletedAt
+          data: data
         });
         await item.save();
         return item;

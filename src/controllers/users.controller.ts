@@ -62,8 +62,7 @@ export class usersController extends Controller {
      @BodyProp('lastname') lastname: string,
      @BodyProp('status') status: number,
      @BodyProp('role') role: string,
-     @BodyProp('phone') phone: string,
-     @BodyProp('deletedAt') deletedAt: Date ): Promise<any> {
+     @BodyProp('phone') phone: string): Promise<any> {
         const item = new usersModel({
           email: email,
           password: password,
@@ -72,8 +71,7 @@ export class usersController extends Controller {
           lastname: lastname,
           status: status,
           role: role,
-          phone: phone,
-          deletedAt: deletedAt
+          phone: phone
         });
         console.log(item.password);
         item.password = bcrypt.hashSync(item.password, 10);

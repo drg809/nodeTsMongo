@@ -80,7 +80,6 @@ export function RegisterRoutes(app: express.Express) {
         status: { "in": "body-prop", "name": "status", "required": false, "dataType": "double" },
         role: { "in": "body-prop", "name": "role", "required": false, "dataType": "string" },
         phone: { "in": "body-prop", "name": "phone", "required": false, "dataType": "string" },
-        deletedAt: { "in": "body-prop", "name": "deletedAt", "required": false, "dataType": "datetime" },
       };
 
       let validatedArgs: any[] = [];
@@ -287,7 +286,6 @@ export function RegisterRoutes(app: express.Express) {
         tag: { "in": "body-prop", "name": "tag", "required": true, "dataType": "string" },
         setTft: { "in": "body-prop", "name": "setTft", "required": true, "dataType": "string" },
         data: { "in": "body-prop", "name": "data", "required": true, "dataType": "string" },
-        deletedAt: { "in": "body-prop", "name": "deletedAt", "required": false, "dataType": "datetime" },
       };
 
       let validatedArgs: any[] = [];
