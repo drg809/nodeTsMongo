@@ -9,3 +9,4 @@ logs
 logs/**
 logs/**/**
 package-lock.json
+.env
