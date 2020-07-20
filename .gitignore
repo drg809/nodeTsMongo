@@ -1,0 +1,12 @@
+# GITIGNORE FILE
+node_modules
+dist
+dist/**
+dist/**/**
+uploads/**
+uploads/**/**
+logs
+logs/**
+logs/**/**
+package-lock.json
+.env
