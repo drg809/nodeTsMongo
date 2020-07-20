@@ -1,0 +1,594 @@
+{
+	"basePath": "/",
+	"consumes": [
+		"application/json"
+	],
+	"definitions": {},
+	"info": {
+		"title": "guidenodemongo",
+		"version": "1.0.0",
+		"license": {
+			"name": "ISC"
+		}
+	},
+	"paths": {
+		"/users": {
+			"get": {
+				"operationId": "GetAll",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"schema": {
+							"type": "array",
+							"items": {
+								"type": "object"
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": []
+			},
+			"post": {
+				"operationId": "Create",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"schema": {
+							"type": "object"
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "body",
+						"name": "body",
+						"schema": {
+							"properties": {
+								"email": {
+									"type": "string"
+								},
+								"password": {
+									"type": "string"
+								},
+								"token": {
+									"type": "string"
+								},
+								"name": {
+									"type": "string"
+								},
+								"lastname": {
+									"type": "string"
+								},
+								"status": {
+									"type": "number",
+									"format": "double"
+								},
+								"role": {
+									"type": "string"
+								},
+								"phone": {
+									"type": "string"
+								},
+								"deletedAt": {
+									"type": "string",
+									"format": "date-time"
+								}
+							},
+							"title": "CreateBody",
+							"type": "object",
+							"required": [
+								"email",
+								"password",
+								"token",
+								"name",
+								"lastname",
+								"status",
+								"role",
+								"phone",
+								"deletedAt"
+							]
+						}
+					}
+				]
+			}
+		},
+		"/users/{id}": {
+			"get": {
+				"operationId": "GetOne",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"schema": {
+							"type": "array",
+							"items": {
+								"type": "object"
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"type": "string"
+					}
+				]
+			},
+			"put": {
+				"operationId": "Update",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"204": {
+						"description": "No content"
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"type": "string"
+					},
+					{
+						"in": "body",
+						"name": "body",
+						"schema": {
+							"properties": {
+								"name": {
+									"type": "string"
+								},
+								"lastname": {
+									"type": "string"
+								},
+								"status": {
+									"type": "number",
+									"format": "double"
+								},
+								"role": {
+									"type": "string"
+								},
+								"phone": {
+									"type": "string"
+								},
+								"deletedAt": {
+									"type": "string",
+									"format": "date-time"
+								}
+							},
+							"title": "UpdateBody",
+							"type": "object",
+							"required": [
+								"name",
+								"lastname",
+								"status",
+								"role",
+								"phone",
+								"deletedAt"
+							]
+						}
+					}
+				]
+			},
+			"delete": {
+				"operationId": "Remove",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"204": {
+						"description": "No content"
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"type": "string"
+					}
+				]
+			}
+		},
+		"/users/login": {
+			"post": {
+				"operationId": "Login",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"schema": {
+							"type": "object"
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "body",
+						"name": "body",
+						"schema": {
+							"properties": {
+								"email": {
+									"type": "string"
+								},
+								"password": {
+									"type": "string"
+								}
+							},
+							"title": "LoginBody",
+							"type": "object",
+							"required": [
+								"email",
+								"password"
+							]
+						}
+					}
+				]
+			}
+		},
+		"/summoners": {
+			"get": {
+				"operationId": "GetAll",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"schema": {
+							"type": "array",
+							"items": {
+								"type": "object"
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": []
+			},
+			"post": {
+				"operationId": "Create",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"schema": {
+							"type": "object"
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "body",
+						"name": "body",
+						"schema": {
+							"properties": {
+								"userId": {
+									"type": "string"
+								},
+								"summonerName": {
+									"type": "string"
+								}
+							},
+							"title": "CreateBody",
+							"type": "object",
+							"required": [
+								"userId",
+								"summonerName"
+							]
+						}
+					}
+				]
+			}
+		},
+		"/summoners/{id}": {
+			"get": {
+				"operationId": "GetOne",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"schema": {
+							"type": "array",
+							"items": {
+								"type": "object"
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"type": "string"
+					}
+				]
+			},
+			"put": {
+				"operationId": "Update",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"204": {
+						"description": "No content"
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"type": "string"
+					},
+					{
+						"in": "body",
+						"name": "body",
+						"schema": {
+							"properties": {
+								"userId": {
+									"type": "string"
+								},
+								"rank": {
+									"type": "string"
+								},
+								"summonerName": {
+									"type": "string"
+								},
+								"puuid": {
+									"type": "string"
+								},
+								"region": {
+									"type": "string"
+								},
+								"summonerLevel": {
+									"type": "number",
+									"format": "double"
+								},
+								"accountId": {
+									"type": "string"
+								},
+								"profileIconId": {
+									"type": "number",
+									"format": "double"
+								},
+								"deletedAt": {
+									"type": "object"
+								}
+							},
+							"title": "UpdateBody",
+							"type": "object",
+							"required": [
+								"userId",
+								"rank",
+								"summonerName",
+								"puuid",
+								"region",
+								"summonerLevel",
+								"accountId",
+								"profileIconId",
+								"deletedAt"
+							]
+						}
+					}
+				]
+			},
+			"delete": {
+				"operationId": "Remove",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"204": {
+						"description": "No content"
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"type": "string"
+					}
+				]
+			}
+		},
+		"/database": {
+			"get": {
+				"operationId": "GetAll",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"schema": {
+							"type": "array",
+							"items": {
+								"type": "object"
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": []
+			},
+			"post": {
+				"operationId": "Create",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"schema": {
+							"type": "object"
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "body",
+						"name": "body",
+						"schema": {
+							"properties": {
+								"tag": {
+									"type": "string"
+								},
+								"setTft": {
+									"type": "string"
+								},
+								"data": {
+									"type": "string"
+								},
+								"deletedAt": {
+									"type": "string",
+									"format": "date-time"
+								}
+							},
+							"title": "CreateBody",
+							"type": "object",
+							"required": [
+								"tag",
+								"setTft",
+								"data",
+								"deletedAt"
+							]
+						}
+					}
+				]
+			}
+		},
+		"/database/{id}": {
+			"get": {
+				"operationId": "GetOne",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"schema": {
+							"type": "array",
+							"items": {
+								"type": "object"
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"type": "string"
+					}
+				]
+			},
+			"put": {
+				"operationId": "Update",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"204": {
+						"description": "No content"
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"type": "string"
+					},
+					{
+						"in": "body",
+						"name": "body",
+						"schema": {
+							"properties": {
+								"tag": {
+									"type": "string"
+								},
+								"setTft": {
+									"type": "string"
+								},
+								"data": {
+									"type": "string"
+								},
+								"deletedAt": {
+									"type": "string",
+									"format": "date-time"
+								}
+							},
+							"title": "UpdateBody",
+							"type": "object",
+							"required": [
+								"tag",
+								"setTft",
+								"data",
+								"deletedAt"
+							]
+						}
+					}
+				]
+			},
+			"delete": {
+				"operationId": "Remove",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"204": {
+						"description": "No content"
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"type": "string"
+					}
+				]
+			}
+		}
+	},
+	"produces": [
+		"application/json"
+	],
+	"swagger": "2.0",
+	"securityDefinitions": {}
+}
