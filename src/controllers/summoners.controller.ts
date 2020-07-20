@@ -13,7 +13,7 @@ export class summonersController extends Controller {
     @Get('/summoners')
     public async getAll() : Promise<any[]> {
         try {
-            let items: any[] = await summonersModel.find({});
+            let items: any[] = await summonersModel.find({deletedAt: { $eq: null }});
             items = items.map((item) => { return {
                 id: item._id,
                 userId: item.userId,
@@ -33,7 +33,7 @@ export class summonersController extends Controller {
     @Get('/summoners/{id}')
     public async getOne(id: string) : Promise<any[]> {
         try {
-            let item: any = await summonersModel.findOne({_id: id});
+            let item: any = await summonersModel.findOne({_id: id, deletedAt: { $eq: null }});
             return item;
         } catch (err) {
             this.setStatus(500);
@@ -74,7 +74,7 @@ export class summonersController extends Controller {
       @BodyProp('accountId') accountId: string,
       @BodyProp('profileIconId') profileIconId: number,
       @BodyProp('deletedAt') deletedAt: any ): Promise<void> {
-        await summonersModel.findOneAndUpdate({_id: id}, { $set: {
+        await summonersModel.findOneAndUpdate({_id: id, deletedAt: { $eq: null }}, { $set: {
             userId: userId,
             rank: rank,
             summonerName: summonerName,
@@ -89,7 +89,7 @@ export class summonersController extends Controller {
 
     @Delete('/summoners/{id}')
     public async remove(id: string): Promise<void> {
-        await summonersModel.findOneAndUpdate({_id: id}, { $set: {
+        await summonersModel.findOneAndUpdate({_id: id, deletedAt: { $eq: null }}, { $set: {
             deletedAt: new Date()
         } } );
     }

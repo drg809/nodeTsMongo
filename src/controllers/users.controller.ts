@@ -9,7 +9,7 @@ export class usersController extends Controller {
     @Get('/users')
     public async getAll() : Promise<any[]> {
         try {
-            let items: any[] = await usersModel.find({});
+            let items: any[] = await usersModel.find({deletedAt: { $eq: null }});
             items = items.map((item) => { return {
                 id: item._id,
                 email: item.email,
@@ -26,7 +26,7 @@ export class usersController extends Controller {
     @Get('/users/{id}')
     public async getOne(id: string) : Promise<any[]> {
         try {
-            let item: any = await usersModel.findOne({_id: id});
+            let item: any = await usersModel.findOne({_id: id, deletedAt: { $eq: null }});
             item.password = "";
             return item;
         } catch (err) {
@@ -38,7 +38,7 @@ export class usersController extends Controller {
     @Post('/users/login')
     public async login(@BodyProp('email') email: string,
     @BodyProp('password') password: string) : Promise<any> {
-        let user = await usersModel.findOne({email: email});
+        let user = await usersModel.findOne({email: email, deletedAt: { $eq: null }});
         if (user && bcrypt.compare(password, user.password)) {
             const token = jwt.sign(
                 {id: user._id},
@@ -87,7 +87,7 @@ export class usersController extends Controller {
       @BodyProp('status') status: number,
       @BodyProp('role') role: string,
       @BodyProp('phone') phone: string ): Promise<void> {
-        await usersModel.findOneAndUpdate({_id: id}, { $set: {
+        await usersModel.findOneAndUpdate({_id: id, deletedAt: { $eq: null }}, { $set: {
           name: name,
           lastname: lastname,
           status: status,
@@ -98,7 +98,7 @@ export class usersController extends Controller {
 
     @Delete('/users/{id}')
     public async remove(id: string): Promise<void> {
-        await usersModel.findOneAndUpdate({_id: id}, { $set: {
+        await usersModel.findOneAndUpdate({_id: id, deletedAt: { $eq: null }}, { $set: {
           deletedAt: new Date()
         } } );
     }
@@ -110,8 +110,8 @@ export class usersController extends Controller {
 
 
     private async updateToken(id: any, token: string ): Promise<void> {
-      await usersModel.findOneAndUpdate({_id: id}, { $set: {
+      await usersModel.findOneAndUpdate({_id: id, deletedAt: { $eq: null }}, { $set: {
         token: token
       } } );
-  }
+    }
 }
