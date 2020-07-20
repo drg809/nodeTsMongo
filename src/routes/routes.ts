@@ -139,6 +139,25 @@ export function RegisterRoutes(app: express.Express) {
       const promise = controller.remove.apply(controller, validatedArgs as any);
       promiseHandler(controller, promise, response, next);
     });
+  app.delete('/api/v1/users/delete/:id', [checkJwt, checkRol],
+    function(request: any, response: any, next: any) {
+      const args = {
+        id: { "in": "path", "name": "id", "required": true, "dataType": "string" },
+      };
+
+      let validatedArgs: any[] = [];
+      try {
+        validatedArgs = getValidatedArgs(args, request);
+      } catch (err) {
+        return next(err);
+      }
+
+      const controller = new usersController();
+
+
+      const promise = controller.trueRemove.apply(controller, validatedArgs as any);
+      promiseHandler(controller, promise, response, next);
+    });
   app.get('/api/v1/summoners', [checkJwt],
     function(request: any, response: any, next: any) {
       const args = {
@@ -241,6 +260,25 @@ export function RegisterRoutes(app: express.Express) {
 
 
       const promise = controller.remove.apply(controller, validatedArgs as any);
+      promiseHandler(controller, promise, response, next);
+    });
+  app.delete('/api/v1/summoners/delete/:id', [checkJwt, checkRol],
+    function(request: any, response: any, next: any) {
+      const args = {
+        id: { "in": "path", "name": "id", "required": true, "dataType": "string" },
+      };
+
+      let validatedArgs: any[] = [];
+      try {
+        validatedArgs = getValidatedArgs(args, request);
+      } catch (err) {
+        return next(err);
+      }
+
+      const controller = new summonersController();
+
+
+      const promise = controller.trueRemove.apply(controller, validatedArgs as any);
       promiseHandler(controller, promise, response, next);
     });
   app.get('/api/v1/database', [checkJwt, checkRol],

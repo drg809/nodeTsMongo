@@ -75,20 +75,27 @@ export class summonersController extends Controller {
       @BodyProp('profileIconId') profileIconId: number,
       @BodyProp('deletedAt') deletedAt: any ): Promise<void> {
         await summonersModel.findOneAndUpdate({_id: id}, { $set: {
-          userId: userId,
-          rank: rank,
-          summonerName: summonerName,
-          puuid: puuid,
-          region: region,
-          summonerLevel: summonerLevel,
-          accountId: accountId,
-          profileIconId: profileIconId,
-          deletedAt: deletedAt
+            userId: userId,
+            rank: rank,
+            summonerName: summonerName,
+            puuid: puuid,
+            region: region,
+            summonerLevel: summonerLevel,
+            accountId: accountId,
+            profileIconId: profileIconId,
+            deletedAt: deletedAt
         } } );
     }
 
     @Delete('/summoners/{id}')
     public async remove(id: string): Promise<void> {
+        await summonersModel.findOneAndUpdate({_id: id}, { $set: {
+            deletedAt: new Date()
+        } } );
+    }
+
+    @Delete('/summoners/delete/{id}')
+    public async trueRemove(id: string): Promise<void> {
         await summonersModel.findByIdAndRemove(id);
     }
 }

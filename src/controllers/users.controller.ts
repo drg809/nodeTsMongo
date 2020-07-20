@@ -86,22 +86,28 @@ export class usersController extends Controller {
       @BodyProp('lastname') lastname: string,
       @BodyProp('status') status: number,
       @BodyProp('role') role: string,
-      @BodyProp('phone') phone: string,
-      @BodyProp('deletedAt') deletedAt: Date ): Promise<void> {
+      @BodyProp('phone') phone: string ): Promise<void> {
         await usersModel.findOneAndUpdate({_id: id}, { $set: {
           name: name,
           lastname: lastname,
           status: status,
           role: role,
-          phone: phone,
-          deletedAt: deletedAt
+          phone: phone
         } } );
     }
 
     @Delete('/users/{id}')
     public async remove(id: string): Promise<void> {
+        await usersModel.findOneAndUpdate({_id: id}, { $set: {
+          deletedAt: new Date()
+        } } );
+    }
+
+    @Delete('/users/delete/{id}')
+    public async trueRemove(id: string): Promise<void> {
         await usersModel.findByIdAndRemove(id);
     }
+
 
     private async updateToken(id: any, token: string ): Promise<void> {
       await usersModel.findOneAndUpdate({_id: id}, { $set: {
