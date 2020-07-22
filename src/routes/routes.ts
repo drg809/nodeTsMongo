@@ -55,7 +55,7 @@ export function RegisterRoutes(app: express.Express) {
         email: { "in": "body-prop", "name": "email", "required": true, "dataType": "string" },
         password: { "in": "body-prop", "name": "password", "required": true, "dataType": "string" },
       };
-
+      console.log('pepe');
       let validatedArgs: any[] = [];
       try {
         validatedArgs = getValidatedArgs(args, request);

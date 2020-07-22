@@ -46,21 +46,19 @@ export class summonersController extends Controller {
      @BodyProp('summonerName') summonerName: string ): Promise<any> {
         let item = new summonersModel({
           userId: userId,
-          summonerName: summonerName,
-
+          summonerName: summonerName
         });
-
-
-        riotRequest.request('euw1', 'summoner', '/lol/summoner/v1/summoners/by-name/'+item.summonerName, async function(err, data) {
+        let data: any;
+        try {
+          riotRequest.request('euw1', 'summoner', '/lol/summoner/v1/summoners/by-name/'+item.summonerName, async function(err, data) {
+            err ?  data = err : data = data;
+            console.log(data);
+          });
           console.log(data);
-          await item.save();
-
           return item;
-        });
-
-        this.setStatus(200);
-
-
+        } catch (err) {
+          this.setStatus(500);
+        }
     }
 
     @Put('/summoners/{id}')
