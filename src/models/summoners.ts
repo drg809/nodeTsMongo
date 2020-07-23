@@ -3,7 +3,7 @@ import * as mongoose from "mongoose";
 const summonersSchema = new mongoose.Schema({
     id: { type: mongoose.Schema.Types.ObjectId, required: false },
     userId: { type: mongoose.Schema.Types.ObjectId, required: true },
-    summonerName: { type: String, required: false },
+    summonerName: { type: String, unique : true, required : true, dropDups: true },
     puuid: { type: String, required: false },
     region: { type: String, required: false },
     summonerLevel: { type: Number, required: false },

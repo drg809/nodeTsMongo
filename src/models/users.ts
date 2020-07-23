@@ -2,7 +2,7 @@ import * as mongoose from "mongoose";
 
 const usersSchema = new mongoose.Schema({
     id: { type: mongoose.Schema.Types.ObjectId, required: false },
-    email: { type: String, unique: true, required: true },
+    email: { type: String, unique : true, required : true, dropDups: true },
     password: { type: String, required: true },
     token:  { type: String, required: false },
     name:  { type: String, required: false },
