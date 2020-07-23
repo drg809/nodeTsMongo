@@ -199,7 +199,7 @@ export function RegisterRoutes(app: express.Express) {
     function(request: any, response: any, next: any) {
       const args = {
         userId: { "in": "body-prop", "name": "userId", "required": true, "dataType": "string" },
-        summonerName: { "in": "body-prop", "name": "summonerName", "required": true, "dataType": "string" },
+        summonerName: { "in": "body-prop", "name": "summonerName", "required": true, "unique": true, "dataType": "string" },
       };
 
       let validatedArgs: any[] = [];
