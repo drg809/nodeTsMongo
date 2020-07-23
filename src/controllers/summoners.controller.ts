@@ -4,9 +4,8 @@ import * as mongoose from "mongoose";
 require('dotenv').config();
 
 
-var RiotRequest = require('riot-lol-api');
-
-var riotRequest = new RiotRequest(process.env.RIOT_API_KEY);
+const TeemoJS = require('teemojs');
+let api = TeemoJS(process.env.RIOT_API_KEY);
 
 @Route('/')
 export class summonersController extends Controller {
@@ -50,11 +49,18 @@ export class summonersController extends Controller {
         });
         let data: any;
         try {
-          riotRequest.request('euw1', 'summoner', '/lol/summoner/v1/summoners/by-name/'+item.summonerName, async function(err, data) {
-            err ?  data = err : data = data;
-            console.log(data);
+          api.get('euw1', 'tftSummoner.getBySummonerName', item.summonerName ).then(data => {
+            item.puuid = data.puuid;
+            item.summonerLevel = data.summonerLevel;
+            item.accountId = data.accountId;
+            item.profileIconId = data.profileIconId;
+            try{
+              item.save();
+            }catch(err){
+              console.log('error');
+            }
+
           });
-          console.log(data);
           return item;
         } catch (err) {
           this.setStatus(500);
