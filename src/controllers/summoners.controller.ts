@@ -32,13 +32,36 @@ export class summonersController extends Controller {
     @Get('/summoners/{id}')
     public async getOne(id: string) : Promise<any[]> {
         try {
-            let item: any = await summonersModel.findOne({_id: id, deletedAt: { $eq: null }});
+            let item: any = await summonersModel.findOne({userId: id, deletedAt: { $eq: null }});
+            console.log(id);
             return item;
         } catch (err) {
             this.setStatus(500);
             console.error('Caught error', err);
         }
     }
+
+    @Get('/summoners/users/{id}')
+    public async getAllByUserId(id: string) : Promise<any[]> {
+        try {
+            let items: any[] = await summonersModel.find({userId: id, deletedAt: { $eq: null }});
+            items = items.map((item) => { return {
+                id: item._id,
+                userId: item.userId,
+                summonerName: item.summonerName,
+                rank: item.rank,
+                region: item.region,
+                summonerLevel: item.summonerLevel,
+                profileIconId: item.profileIconId,
+              }
+            });
+            return items;
+        } catch (err) {
+            this.setStatus(500);
+            console.error('Caught error', err);
+        }
+    }
+
 
     @Post('/summoners')
     public async create(@BodyProp('userId') userId: string,
@@ -53,6 +76,7 @@ export class summonersController extends Controller {
             item.puuid = data.puuid;
             item.summonerLevel = data.summonerLevel;
             item.accountId = data.accountId;
+            item.region = 'euw';
             item.profileIconId = data.profileIconId;
             try{
               item.save();
