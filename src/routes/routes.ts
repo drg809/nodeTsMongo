@@ -252,6 +252,24 @@ export function RegisterRoutes(app: express.Express) {
       const promise = controller.getMatches.apply(controller, validatedArgs as any);
       promiseHandler(controller, promise, response, next);
     });
+  app.post('/api/v1/summoners/match_info', [checkJwt],
+    function(request: any, response: any, next: any) {
+      const args = {
+        userId: { "in": "body-prop", "name": "userId", "required": true, "dataType": "string" }
+      };
+      let validatedArgs: any[] = [];
+      try {
+        validatedArgs = getValidatedArgs(args, request);
+      } catch (err) {
+        return next(err);
+      }
+
+      const controller = new summonersController();
+
+
+      const promise = controller.setLastMatchInfo.apply(controller, validatedArgs as any);
+      promiseHandler(controller, promise, response, next);
+    });
   app.put('/api/v1/summoners/:id', [checkJwt],
     function(request: any, response: any, next: any) {
       const args = {

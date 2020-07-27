@@ -1,7 +1,8 @@
 import { summonersModel, ISummoner} from '../models/summoners';
 import { Route, Get, Controller, Post, BodyProp, Put, Delete, SuccessResponse } from 'tsoa';
 import * as mongoose from "mongoose";
-import { summonersEntriesModel } from '../models/summonerEntries';
+import { summonersEntriesModel, ISummonerEntries } from '../models/summonerEntries';
+import { summonersMatchesModel } from '../models/summonerMatches';
 require('dotenv').config();
 
 
@@ -106,6 +107,30 @@ export class summonersController extends Controller {
               });
               sumE.save();
             });
+            return data;
+          });
+
+        } catch (err) {
+          console.log('Error:' + err);
+          this.setStatus(500);
+        }
+    }
+
+    @Post('/summoners/match_info')
+    public async setLastMatchInfo(@BodyProp('userId') userId: string ): Promise<any> {
+        let sum: ISummonerEntries = await summonersEntriesModel.findOne({userId: userId});
+        let data: any[];
+        try {
+          api.get('europe', 'tftMatch.getMatch', sum.entrie ).then(res => {
+            data = res;
+            console.log(data);
+            let sumE = new summonersMatchesModel({
+              userId: sum.userId,
+              entrie: sum.entrie,
+              data: res
+            });
+            sumE.data.metadata;
+            sumE.save();
             return data;
           });
 
