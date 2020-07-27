@@ -129,7 +129,6 @@ export class summonersController extends Controller {
               entrie: sum.entrie,
               data: res
             });
-            sumE.data.metadata;
             sumE.save();
             return data;
           });
