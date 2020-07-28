@@ -38,7 +38,6 @@ export class usersController extends Controller {
     @Post('/users/login')
     public async login(@BodyProp('email') email: string,
     @BodyProp('password') password: string) : Promise<any> {
-        console.log('paco');
         let user = await usersModel.findOne({email: email, deletedAt: { $eq: null }});
         if (user && bcrypt.compare(password, user.password)) {
             const token = jwt.sign(
