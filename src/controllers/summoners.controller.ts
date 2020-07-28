@@ -47,7 +47,6 @@ export class summonersController extends Controller {
     public async getMatchInfo(userId: string) : Promise<any> {
         try {
             let item: ISummonerMatches = await summonersMatchesModel.findOne({userId: userId});
-            console.log(item);
             return item;
         } catch (err) {
             this.setStatus(500);
@@ -59,7 +58,6 @@ export class summonersController extends Controller {
     public async getMatchHistory(userId: string) : Promise<any> {
         try {
             let item: ISummonerMatches[] = await summonersMatchesModel.find({userId: userId, 'data.info.queue_id': {$eq: 1100}});
-            console.log(item);
             return item;
         } catch (err) {
             this.setStatus(500);
@@ -152,7 +150,6 @@ export class summonersController extends Controller {
               if (!match) {
                 api.get('europe', 'tftMatch.getMatch', ent.entrie ).then(res => {
                   data = res;
-                  console.log(data);
                   let sumE = new summonersMatchesModel({
                     userId: ent.userId,
                     entrie: ent.entrie,
