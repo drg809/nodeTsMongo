@@ -55,6 +55,18 @@ export class summonersController extends Controller {
         }
     }
 
+    @Get('/summoners/match_history/{id}')
+    public async getMatchHistory(userId: string) : Promise<any> {
+        try {
+            let item: ISummonerMatches[] = await summonersMatchesModel.find({userId: userId});
+            console.log(item);
+            return item;
+        } catch (err) {
+            this.setStatus(500);
+            console.error('Caught error', err);
+        }
+    }
+
     @Get('/summoners/users/{id}')
     public async getAllByUserId(id: string) : Promise<any[]> {
         try {
