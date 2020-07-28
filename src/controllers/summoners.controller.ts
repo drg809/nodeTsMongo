@@ -2,7 +2,7 @@ import { summonersModel, ISummoner} from '../models/summoners';
 import { Route, Get, Controller, Post, BodyProp, Put, Delete, SuccessResponse } from 'tsoa';
 import * as mongoose from "mongoose";
 import { summonersEntriesModel, ISummonerEntries } from '../models/summonerEntries';
-import { summonersMatchesModel } from '../models/summonerMatches';
+import { summonersMatchesModel, ISummonerMatches } from '../models/summonerMatches';
 require('dotenv').config();
 
 
@@ -32,10 +32,22 @@ export class summonersController extends Controller {
         }
     }
     @Get('/summoners/{id}')
-    public async getOne(id: string) : Promise<any[]> {
+    public async getOne(id: string) : Promise<any> {
         try {
             let item: any = await summonersModel.findOne({userId: id, deletedAt: { $eq: null }});
             console.log(id);
+            return item;
+        } catch (err) {
+            this.setStatus(500);
+            console.error('Caught error', err);
+        }
+    }
+
+    @Get('/summoners/match/{id}')
+    public async getMatchInfo(userId: string) : Promise<any> {
+        try {
+            let item: ISummonerMatches = await summonersMatchesModel.findOne({userId: userId});
+            console.log(item);
             return item;
         } catch (err) {
             this.setStatus(500);
