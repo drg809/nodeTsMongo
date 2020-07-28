@@ -112,7 +112,7 @@ export class summonersController extends Controller {
         try {
           api.get('europe', 'tftMatch.getMatchIdsByPUUID', sum.puuid ).then(res => {
             data = res;
-            data.forEach(function (value) {
+            data.forEach(value => {
               let sumE = new summonersEntriesModel({
                 userId: sum.userId,
                 entrie: value
@@ -130,20 +130,30 @@ export class summonersController extends Controller {
 
     @Post('/summoners/match_info_ext')
     public async setLastMatchInfoExt(@BodyProp('userId') userId: string ): Promise<any> {
-        let sum: ISummonerEntries = await summonersEntriesModel.findOne({userId: userId});
+        this.getMatchesExt(userId);
+        let sum: ISummonerEntries[] = await summonersEntriesModel.find({userId: userId});
         let data: any[];
         try {
-          api.get('europe', 'tftMatch.getMatch', sum.entrie ).then(res => {
-            data = res;
-            console.log(data);
-            let sumE = new summonersMatchesModel({
-              userId: sum.userId,
-              entrie: sum.entrie,
-              data: res
-            });
-            sumE.save();
-            return data;
+          sum.forEach(ent => {
+            setTimeout(async function () {
+              let match: ISummonerMatches = await summonersMatchesModel.findOne({entrie: ent.entrie});
+              if (!match) {
+                api.get('europe', 'tftMatch.getMatch', ent.entrie ).then(res => {
+                  data = res;
+                  console.log(data);
+                  let sumE = new summonersMatchesModel({
+                    userId: ent.userId,
+                    entrie: ent.entrie,
+                    data: res
+                  });
+                  sumE.save();
+                  return data;
+                });
+              }
+            }, 100);
+
           });
+
 
         } catch (err) {
           console.log('Error:' + err);
