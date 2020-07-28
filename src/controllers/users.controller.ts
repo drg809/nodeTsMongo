@@ -2,6 +2,7 @@ import { Route, Get, Controller, Post, BodyProp, Put, Delete, SuccessResponse } 
 import { usersModel, IUser} from '../models/users';
 import * as jwt from "jsonwebtoken";
 import config from "../helpers/config";
+import { summonersModel } from '../models/summoners';
 const bcrypt = require('bcrypt');
 
 @Route('/')
@@ -48,6 +49,9 @@ export class usersController extends Controller {
             user.password = "";
             user.token = token;
             this.updateToken(user._id,token);
+            //let sum = await summonersModel.findOne({userId: user._id});
+            //console.log(sum);
+            user.puuid = '3U9Cbs9gIE86er_svec4HWddvFAXhSFQ5HPE3tYM8ahUqk3lBtnaHXMjmo3916HUKDpwLLR0AgQnlw';
             return user;
         } else {
             this.setStatus(500);
