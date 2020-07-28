@@ -93,8 +93,8 @@ export class summonersController extends Controller {
         }
     }
 
-    @Post('/summoners/get_matches')
-    public async getMatches(@BodyProp('userId') userId: string ): Promise<any> {
+    @Post('/summoners/get_matches_ext')
+    public async getMatchesExt(@BodyProp('userId') userId: string ): Promise<any> {
         let sum: ISummoner = await summonersModel.findOne({userId: userId, deletedAt: { $eq: null }});
         let data: any[];
         try {
@@ -116,8 +116,8 @@ export class summonersController extends Controller {
         }
     }
 
-    @Post('/summoners/match_info')
-    public async setLastMatchInfo(@BodyProp('userId') userId: string ): Promise<any> {
+    @Post('/summoners/match_info_ext')
+    public async setLastMatchInfoExt(@BodyProp('userId') userId: string ): Promise<any> {
         let sum: ISummonerEntries = await summonersEntriesModel.findOne({userId: userId});
         let data: any[];
         try {

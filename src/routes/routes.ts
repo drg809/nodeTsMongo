@@ -234,7 +234,7 @@ export function RegisterRoutes(app: express.Express) {
       const promise = controller.create.apply(controller, validatedArgs as any);
       promiseHandler(controller, promise, response, next);
     });
-  app.post('/api/v1/summoners/get_matches', [checkJwt],
+  app.post('/api/v1/summoners/get_matches_ext', [checkJwt],
     function(request: any, response: any, next: any) {
       const args = {
         userId: { "in": "body-prop", "name": "userId", "required": true, "dataType": "string" }
@@ -249,10 +249,10 @@ export function RegisterRoutes(app: express.Express) {
       const controller = new summonersController();
 
 
-      const promise = controller.getMatches.apply(controller, validatedArgs as any);
+      const promise = controller.getMatchesExt.apply(controller, validatedArgs as any);
       promiseHandler(controller, promise, response, next);
     });
-  app.post('/api/v1/summoners/match_info', [checkJwt],
+  app.post('/api/v1/summoners/match_info_ext', [checkJwt],
     function(request: any, response: any, next: any) {
       const args = {
         userId: { "in": "body-prop", "name": "userId", "required": true, "dataType": "string" }
@@ -267,7 +267,7 @@ export function RegisterRoutes(app: express.Express) {
       const controller = new summonersController();
 
 
-      const promise = controller.setLastMatchInfo.apply(controller, validatedArgs as any);
+      const promise = controller.setLastMatchInfoExt.apply(controller, validatedArgs as any);
       promiseHandler(controller, promise, response, next);
     });
   app.put('/api/v1/summoners/:id', [checkJwt],
