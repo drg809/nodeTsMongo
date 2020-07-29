@@ -54,6 +54,14 @@ export class summonersController extends Controller {
         }
     }
 
+    @Get('/summoners/entries/{id}')
+    public async getEntriesBySummoner(userId: string) : Promise<any> {
+        let item: ISummoner = await summonersModel.findOne({userId: userId});
+        api.get('euw1', 'tftLeague.getLeagueEntriesForSummoner', item.puuid ).then(data => {
+          console.log(data);
+        });
+    }
+
     @Get('/summoners/match_history/{id}')
     public async getMatchHistory(userId: string) : Promise<any> {
         try {
