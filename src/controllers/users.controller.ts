@@ -41,14 +41,14 @@ export class usersController extends Controller {
     @BodyProp('password') password: string) : Promise<any> {
         let user = await usersModel.findOne({email: email, deletedAt: { $eq: null }});
         if (user && bcrypt.compare(password, user.password)) {
-            const token = jwt.sign(
-                {id: user._id},
-                config.jwtSecret,
-                {expiresIn: "30d"}
-            );
+            // const token = jwt.sign(
+            //     {id: user._id},
+            //     config.jwtSecret,
+            //     {expiresIn: "30d"}
+            // );
             user.password = "";
-            user.token = token;
-            this.updateToken(user._id,token);
+            //user.token = token;
+            //this.updateToken(user._id,token);
             //let sum = await summonersModel.findOne({userId: user._id});
             //console.log(sum);
             user.puuid = '3U9Cbs9gIE86er_svec4HWddvFAXhSFQ5HPE3tYM8ahUqk3lBtnaHXMjmo3916HUKDpwLLR0AgQnlw';
