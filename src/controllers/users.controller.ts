@@ -3,6 +3,7 @@ import { usersModel, IUser} from '../models/users';
 import * as jwt from "jsonwebtoken";
 import config from "../helpers/config";
 import { summonersModel } from '../models/summoners';
+import { retriesModel } from '../models/retries';
 const bcrypt = require('bcrypt');
 
 @Route('/')
@@ -77,9 +78,9 @@ export class usersController extends Controller {
           role: role,
           phone: phone
         });
-        console.log(item.password);
         item.password = bcrypt.hashSync(item.password, 10);
         await item.save();
+        this.setRetries(item._id);
         item.password = "";
         return item;
     }
@@ -112,10 +113,26 @@ export class usersController extends Controller {
         await usersModel.findByIdAndRemove(id);
     }
 
-
     private async updateToken(id: any, token: string ): Promise<void> {
       await usersModel.findOneAndUpdate({_id: id, deletedAt: { $eq: null }}, { $set: {
         token: token
       } } );
     }
+
+    private async setRetries(id: any): Promise<boolean> {
+      try {
+        config.retries.forEach(async element => {
+          const item = new retriesModel({
+            userId: id,
+            action: element
+          });
+          await item.save();
+        });
+        return true;
+      } catch (err) {
+          this.setStatus(500);
+          console.error('Caught error', err);
+      }
+    }
+
 }
