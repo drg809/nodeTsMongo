@@ -4,7 +4,7 @@ const retriesSchema = new mongoose.Schema({
     id: { type: mongoose.Schema.Types.ObjectId, required: false },
     userId: { type: mongoose.Schema.Types.ObjectId, required: true },
     action: { type: String, required: true },
-    retries: { type: Number, required: true },
+    retries: { type: Number, default: 0, required: true },
     first: { type: Date, required: true },
     last: { type: Date, required: true },
 });
