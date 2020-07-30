@@ -3,10 +3,10 @@ import * as mongoose from "mongoose";
 const retriesSchema = new mongoose.Schema({
     id: { type: mongoose.Schema.Types.ObjectId, required: false },
     userId: { type: mongoose.Schema.Types.ObjectId, required: true },
-    action: { type: String, required: true },
+    action: { type: String, unique: true, required: true },
     retries: { type: Number, default: 0, required: true },
-    first: { type: Date, required: true },
-    last: { type: Date, required: true },
+    first: { type: Date, required: false },
+    last: { type: Date, required: false },
 });
 
 export interface IRetries extends mongoose.Document {
