@@ -44,9 +44,9 @@ export class summonersController extends Controller {
     }
 
     @Get('/summoners/match/{id}')
-    public async getMatchInfo(userId: string) : Promise<any> {
+    public async getMatchInfo(entrie: string) : Promise<any> {
         try {
-            let item: ISummonerMatches = await summonersMatchesModel.findOne({userId: userId});
+            let item: ISummonerMatches = await summonersMatchesModel.findOne({entrie: entrie});
             return item;
         } catch (err) {
             this.setStatus(500);
