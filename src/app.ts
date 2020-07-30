@@ -8,7 +8,7 @@ import * as swaggerUi from 'swagger-ui-express';
 import './controllers/users.controller';
 import './controllers/summoners.controller';
 import './controllers/database.controller';
-
+import './controllers/retries.controller';
 
 import { RegisterRoutes } from './routes/routes';
 
