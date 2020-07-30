@@ -17,6 +17,6 @@ export interface IRetries extends mongoose.Document {
   last?: Date
 };
 
-const retriesModel = mongoose.model<IRetries>('database', retriesSchema);
+const retriesModel = mongoose.model<IRetries>('retries', retriesSchema);
 
 export { retriesModel }
