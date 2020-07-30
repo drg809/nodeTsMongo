@@ -9,8 +9,11 @@ export class retriesController extends Controller {
             let items: any[] = await retriesModel.find({});
             items = items.map((item) => { return {
                 id: item._id,
-                tag: item.tag,
-                setTft: item.setTft
+                userId: item.userId,
+                action: item.action,
+                retries: item.retries,
+                first: item.first,
+                last: item.last
               }
             });
             return items;
@@ -32,13 +35,17 @@ export class retriesController extends Controller {
     }
 
     @Post('/retries')
-    public async create(@BodyProp('tag') tag: string,
-     @BodyProp('setTft') setTft: string,
-     @BodyProp('data') data: string ): Promise<any> {
+    public async create(@BodyProp('userId') userId: string,
+     @BodyProp('action') action: string,
+     @BodyProp('retries') retries: string,
+     @BodyProp('first') first: Date,
+     @BodyProp('last') last: Date ): Promise<any> {
         const item = new retriesModel({
-          tag: tag,
-          setTft: setTft,
-          data: data
+          userId: userId,
+          action: action,
+          retries: retries,
+          first: first,
+          last: last
         });
         await item.save();
         return item;
@@ -46,15 +53,17 @@ export class retriesController extends Controller {
 
     @Put('/retries/{id}')
     public async update(id: string,
-      @BodyProp('tag') tag: string,
-      @BodyProp('setTft') setTft: string,
-      @BodyProp('data') data: string,
-      @BodyProp('deletedAt') deletedAt: Date ): Promise<void> {
+      @BodyProp('userId') userId: string,
+      @BodyProp('action') action: string,
+      @BodyProp('retries') retries: number,
+      @BodyProp('first') first: Date,
+      @BodyProp('last') last: Date ): Promise<void> {
         await retriesModel.findOneAndUpdate({_id: id}, { $set: {
-          tag: tag,
-          setTft: setTft,
-          data: data,
-          deletedAt: deletedAt
+          userId: userId,
+          action: action,
+          retries: retries,
+          first: first,
+          last: last
         } } );
     }
 
