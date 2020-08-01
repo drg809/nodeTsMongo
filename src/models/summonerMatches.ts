@@ -18,29 +18,43 @@ const summonersMatchesSchema = new mongoose.Schema({
     id: { type: mongoose.Schema.Types.ObjectId, required: false },
     userId: { type: mongoose.Schema.Types.ObjectId, required: true },
     entrie: { type: String, unique : true, required : true, dropDups: true },
-    data:  { metadata: Object, info: {
-      game_datetime: Number,
-      game_length: Number,
-      game_variation: String,
-      game_version: String,
-      participants: Object,
-      queue_id: Number,
-      tft_set_number: Number
-    } }
+    data:  {
+      metadata: {
+        data_version: Number,
+        match_id: String,
+        participants: [String]
+      },
+      info: {
+        game_datetime: Number,
+        game_length: Number,
+        game_variation: String,
+        game_version: String,
+        participants: Object,
+        queue_id: Number,
+        tft_set_number: Number
+      }
+    }
 });
 
 export interface ISummonerMatches extends mongoose.Document {
     userId?: string,
     entrie?: string,
-    data?: { metadata: object, info: {
-        game_datetime: number,
-        game_length: number,
-        game_variation: string,
-        game_version: string,
-        participants: object,
-        queue_id: number,
-        tft_set_number: number
-    } }
+    data?: {
+      metadata: {
+        data_version: number,
+        match_id: string,
+        participants: [string]
+      },
+      info: {
+          game_datetime: number,
+          game_length: number,
+          game_variation: string,
+          game_version: string,
+          participants: object,
+          queue_id: number,
+          tft_set_number: number
+      }
+    }
 };
 
 const summonersMatchesModel = mongoose.model<ISummonerMatches>('summonersMatches', summonersMatchesSchema);
