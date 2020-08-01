@@ -302,7 +302,6 @@ export function RegisterRoutes(app: express.Express) {
       } catch (err) {
         return next(err);
       }
-
       const controller = new summonersController();
 
 
