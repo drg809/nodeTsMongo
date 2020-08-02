@@ -14,7 +14,7 @@ server.on('error', (err) => {
   console.error(err);
 });
 
-const MONGO_URI = 'mongodb://127.0.0.1:27017/users';
+const MONGO_URI = config.dbUrl;
 server.on('listening', async () => {
     console.info(`Listening on port ${port}`);
     mongoose.connect(MONGO_URI, { useNewUrlParser: true });
