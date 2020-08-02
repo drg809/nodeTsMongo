@@ -51,11 +51,12 @@ export class summonersController extends Controller {
             let item: ISummonerMatches = await summonersMatchesModel.findOne({entrie: entrie});
             item.data.info.participants.forEach(async x => {
               let part: IParticipant = await participantsModel.findOne({puuid: x.puuid});
-              item.data.info.participants[num].puuid = part.summonerName;
+              item.data.info.participants[num].name = await part.summonerName;
               console.log(item.data.info.participants[num]);
               console.log(num);
               ++num;
-            })
+            });
+            console.log(item.data.info.participants);
             return item;
         } catch (err) {
             this.setStatus(500);
