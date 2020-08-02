@@ -30,6 +30,7 @@ const summonersMatchesSchema = new mongoose.Schema({
         game_variation: String,
         game_version: String,
         participants: [{
+          name: String,
           companion: Object,
           gold_left: Number,
           last_round: Number,
@@ -39,7 +40,8 @@ const summonersMatchesSchema = new mongoose.Schema({
           puuid: String,
           time_eliminated: Number,
           total_damage_to_players: Number,
-          name: String
+          traits: Object,
+          units: Object
         }],
         queue_id: Number,
         tft_set_number: Number
@@ -62,6 +64,7 @@ export interface ISummonerMatches extends mongoose.Document {
           game_variation: string,
           game_version: string,
           participants: [{
+            name?: string,
             companion: object,
             gold_left: number,
             last_round: number,
@@ -71,7 +74,8 @@ export interface ISummonerMatches extends mongoose.Document {
             puuid: string,
             time_eliminated: number,
             total_damage_to_players: number,
-            name?: string
+            traits: object,
+            units: object
           }],
           queue_id: number,
           tft_set_number: number
