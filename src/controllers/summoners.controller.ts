@@ -3,6 +3,7 @@ import { Route, Get, Controller, Post, BodyProp, Put, Delete, SuccessResponse } 
 import * as mongoose from "mongoose";
 import { summonersEntriesModel, ISummonerEntries } from '../models/summonerEntries';
 import { summonersMatchesModel, ISummonerMatches } from '../models/summonerMatches';
+import { participantsModel, IParticipant } from '../models/participants';
 require('dotenv').config();
 
 
@@ -45,8 +46,16 @@ export class summonersController extends Controller {
 
     @Get('/summoners/match/{id}')
     public async getMatchInfo(entrie: string) : Promise<any> {
+        let num: number = 0;
         try {
             let item: ISummonerMatches = await summonersMatchesModel.findOne({entrie: entrie});
+            item.data.info.participants.forEach(async x => {
+              let part: IParticipant = await participantsModel.findOne({puuid: x.puuid});
+              item.data.info.participants[num].puuid = part.summonerName;
+              console.log(item.data.info.participants[num]);
+              console.log(num);
+              ++num;
+            })
             return item;
         } catch (err) {
             this.setStatus(500);
@@ -164,8 +173,31 @@ export class summonersController extends Controller {
                     data: res
                   });
                   sumE.save();
+                  sumE.data.metadata.participants.forEach(async x => {
+                    let part: IParticipant = await participantsModel.findOne({puuid: x});
+                    if(!part) {
+                      api.get('euw1', 'tftSummoner.getByPUUID', x ).then(data => {
+                        let item = new participantsModel({
+                          summonerName: data.name,
+                          puuid: data.puuid,
+                          summonerLevel: data.summonerLevel,
+                          accountId: data.accountId,
+                          region: 'euw',
+                          profileIconId: data.profileIconId
+                        });
+
+                        try{
+                          item.save();
+                        }catch(err){
+                          console.log('error');
+                        }
+
+                      });
+                    }
+                  });
                   return data;
                 });
+
               }
             }, 100);
 
