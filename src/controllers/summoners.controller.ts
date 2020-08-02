@@ -49,9 +49,8 @@ export class summonersController extends Controller {
         let num: number = 0;
         try {
             let item: ISummonerMatches = await summonersMatchesModel.findOne({entrie: entrie});
-            //console.log({item})
+            console.log({item})
 
-            /*
             for (const x of item.data.info.participants) {
               let part: IParticipant = await participantsModel.findOne({puuid: x.puuid});
               item.data.info.participants[num].name = part.summonerName;
@@ -59,7 +58,6 @@ export class summonersController extends Controller {
               console.log(num);
               ++num;
             }
-            */
 
             console.log(item.data.info);
             return item;
