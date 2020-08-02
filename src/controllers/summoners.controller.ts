@@ -45,18 +45,23 @@ export class summonersController extends Controller {
     }
 
     @Get('/summoners/match/{id}')
-    public async getMatchInfo(entrie: string) : Promise<any> {
+    public async getMatchInfo(entrie: string) {
         let num: number = 0;
         try {
             let item: ISummonerMatches = await summonersMatchesModel.findOne({entrie: entrie});
-            item.data.info.participants.forEach(async x => {
+            //console.log({item})
+
+            /*
+            for (const x of item.data.info.participants) {
               let part: IParticipant = await participantsModel.findOne({puuid: x.puuid});
-              item.data.info.participants[num].name = await part.summonerName;
+              item.data.info.participants[num].name = part.summonerName;
               console.log(item.data.info.participants[num]);
               console.log(num);
               ++num;
-            });
-            console.log(item.data.info.participants);
+            }
+            */
+
+            console.log(item.data.info);
             return item;
         } catch (err) {
             this.setStatus(500);

@@ -253,7 +253,7 @@ export function RegisterRoutes(app: express.Express) {
       promiseHandler(controller, promise, response, next);
     });
   app.get('/api/v1/summoners/match/:id', [checkJwt],
-    function(request: any, response: any, next: any) {
+    async function(request: any, response: any, next: any) {
       const args = {
         id: { "in": "path", "name": "id", "required": true, "dataType": "string" },
       };
@@ -269,7 +269,7 @@ export function RegisterRoutes(app: express.Express) {
 
 
       const promise = controller.getMatchInfo.apply(controller, validatedArgs as any);
-      promiseHandler(controller, promise, response, next);
+      await promiseHandler(controller, promise, response, next);
     });
   app.post('/api/v1/summoners', [checkJwt],
     function(request: any, response: any, next: any) {
