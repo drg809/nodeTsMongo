@@ -1,17 +1,13 @@
 import * as mongoose from "mongoose";
 
 const ParticipantsSchema = new mongoose.Schema({
-    companion: Object,
-    gold_left: Number,
-    last_round: Number,
-    level: Number,
-    placement: Number,
-    players_eliminated: Number,
-    puuid: String,
-    time_eliminated: Number,
-    total_damage_to_players: Number,
-    traits: Object,
-    units: Object
+  id: { type: mongoose.Schema.Types.ObjectId, required: false },
+  puuid: { type: String, unique: true, required: false },
+  summonerName: { type: String, unique: true, required: false },
+  summonerLevel: { type: Number, required: false },
+  accountId: { type: String, required: false },
+  region: { type: String, required: false },
+  profileIconId: { type: Number, required: false }
 });
 
 const summonersMatchesSchema = new mongoose.Schema({
@@ -22,7 +18,7 @@ const summonersMatchesSchema = new mongoose.Schema({
       metadata: {
         data_version: Number,
         match_id: String,
-        participants: [String]
+        participants: [ParticipantsSchema]
       },
       info: {
         game_datetime: Number,
