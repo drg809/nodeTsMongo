@@ -11,6 +11,7 @@ const usersSchema = new mongoose.Schema({
     role:  { type: String, required: false },
     phone:  { type: String, required: false },
     puuid:  { type: String, required: false },
+    main: { type: String, required: false },
     deletedAt: { type: Date, required: false }
 });
 
@@ -24,6 +25,7 @@ export interface IUser extends mongoose.Document {
     role?: string,
     phone?: string,
     puuid?: any,
+    main?: any,
     deletedAt?: Date
 };
 

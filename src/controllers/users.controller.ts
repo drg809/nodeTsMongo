@@ -53,6 +53,7 @@ export class usersController extends Controller {
             //let sum = await summonersModel.findOne({userId: user._id});
             //console.log(sum);
             user.puuid = '3U9Cbs9gIE86er_svec4HWddvFAXhSFQ5HPE3tYM8ahUqk3lBtnaHXMjmo3916HUKDpwLLR0AgQnlw';
+            user.main = '5f1f4014a5b8673172618d14';
             return user;
         } else {
             this.setStatus(500);
