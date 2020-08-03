@@ -356,6 +356,7 @@ export function RegisterRoutes(app: express.Express) {
     });
   app.put('/api/v1/summoners/main/:id', [checkJwt],
     function(request: any, response: any, next: any) {
+      console.log('paco');
       const args = {
         id: { "in": "path", "name": "id", "required": true, "dataType": "string" },
         main: { "in": "body-prop", "name": "main", "required": true, "dataType": "boolean" }

@@ -24,6 +24,7 @@ export class summonersController extends Controller {
                 region: item.region,
                 summonerLevel: item.summonerLevel,
                 profileIconId: item.profileIconId,
+                main: item.main
               }
             });
             return items;
@@ -49,17 +50,13 @@ export class summonersController extends Controller {
         let num: number = 0;
         try {
             let item: ISummonerMatches = await summonersMatchesModel.findOne({entrie: entrie});
-            console.log({item})
 
             for (const x of item.data.info.participants) {
               let part: IParticipant = await participantsModel.findOne({puuid: x.puuid});
               item.data.info.participants[num].name = part.summonerName;
-              console.log(item.data.info.participants[num]);
-              console.log(num);
               ++num;
             }
 
-            console.log(item.data.info);
             return item;
         } catch (err) {
             this.setStatus(500);
@@ -98,6 +95,7 @@ export class summonersController extends Controller {
                 region: item.region,
                 summonerLevel: item.summonerLevel,
                 profileIconId: item.profileIconId,
+                main: item.main
               }
             });
             return items;
@@ -239,7 +237,7 @@ export class summonersController extends Controller {
     }
 
     @Put('/summoners/main/{id}')
-    public async setMain(id: string, main: boolean): Promise<void> {
+    public async setMain(@BodyProp('id') id: string,@BodyProp('main') main: boolean) {
         await summonersModel.findOneAndUpdate({_id: id, deletedAt: { $eq: null }}, { $set: {
             main: main
         } } );
