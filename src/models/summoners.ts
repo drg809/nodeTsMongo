@@ -9,6 +9,7 @@ const summonersSchema = new mongoose.Schema({
     summonerLevel: { type: Number, required: false },
     accountId: { type: String, required: false },
     profileIconId: { type: Number, required: false },
+    main: { type: Boolean, required: false },
     deletedAt: { type: Date, required: false }
 });
 
@@ -20,6 +21,7 @@ export interface ISummoner extends mongoose.Document {
   summonerLevel?: number,
   accountId?: string,
   profileIconId?: number,
+  main: boolean,
   deletedAt?: Date
 };
 
