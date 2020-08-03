@@ -238,6 +238,13 @@ export class summonersController extends Controller {
         } } );
     }
 
+    @Put('/summoners/main/{id}')
+    public async setMain(id: string, main: boolean): Promise<void> {
+        await summonersModel.findOneAndUpdate({_id: id, deletedAt: { $eq: null }}, { $set: {
+            main: main
+        } } );
+    }
+
     @Delete('/summoners/{id}')
     public async remove(id: string): Promise<void> {
         await summonersModel.findOneAndUpdate({_id: id, deletedAt: { $eq: null }}, { $set: {
