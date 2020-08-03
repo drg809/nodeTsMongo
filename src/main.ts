@@ -13,11 +13,7 @@ server.on('error', (err) => {
     console.error(err);
 });
 
-<<<<<<< HEAD
 const MONGO_URI = config.mongoUrl;
-=======
-const MONGO_URI = config.dbUrl;
->>>>>>> master
 server.on('listening', async () => {
     console.info(`Listening on port ${port}`);
     mongoose.connect(MONGO_URI, {useUnifiedTopology: true, useNewUrlParser: true});
