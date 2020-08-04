@@ -1,12 +1,10 @@
 /* tslint:disable */
 import { Controller, ValidationService, FieldErrors, ValidateError, TsoaRoute } from 'tsoa';
 import { usersController } from '../controllers/users.controller';
+import { summonersController } from '../controllers/summoners.controller';
 import { databaseController } from '../controllers/database.controller';
-import { retriesController } from '../controllers/retries.controller';
-import { summonerStatsController } from '../controllers/summonerStats.controller';
 import * as express from 'express';
 import { checkJwt } from '../middleware/jwtchecker.middleware';
-import { summonersController } from '../controllers/summoners.controller';
 import { checkRol } from '../middleware/checkrol.middleware';
 
 const models: TsoaRoute.Models = {
@@ -57,7 +55,7 @@ export function RegisterRoutes(app: express.Express) {
         email: { "in": "body-prop", "name": "email", "required": true, "dataType": "string" },
         password: { "in": "body-prop", "name": "password", "required": true, "dataType": "string" },
       };
-
+      console.log('pepe');
       let validatedArgs: any[] = [];
       try {
         validatedArgs = getValidatedArgs(args, request);
@@ -71,7 +69,7 @@ export function RegisterRoutes(app: express.Express) {
       const promise = controller.login.apply(controller, validatedArgs as any);
       promiseHandler(controller, promise, response, next);
     });
-  app.post('/api/v1/users', [checkJwt],
+  app.post('/api/v1/users',
     function(request: any, response: any, next: any) {
       const args = {
         email: { "in": "body-prop", "name": "email", "required": true, "unique": true, "dataType": "string" },
@@ -106,6 +104,7 @@ export function RegisterRoutes(app: express.Express) {
         status: { "in": "body-prop", "name": "status", "required": true, "dataType": "double" },
         role: { "in": "body-prop", "name": "role", "required": true, "dataType": "string" },
         phone: { "in": "body-prop", "name": "phone", "required": true, "dataType": "string" },
+        deletedAt: { "in": "body-prop", "name": "deletedAt", "required": true, "dataType": "datetime" },
       };
 
       let validatedArgs: any[] = [];
@@ -140,7 +139,7 @@ export function RegisterRoutes(app: express.Express) {
       const promise = controller.remove.apply(controller, validatedArgs as any);
       promiseHandler(controller, promise, response, next);
     });
-  app.delete('/api/v1/users/delete/:id', [checkJwt],
+  app.delete('/api/v1/users/delete/:id', [checkJwt, checkRol],
     function(request: any, response: any, next: any) {
       const args = {
         id: { "in": "path", "name": "id", "required": true, "dataType": "string" },
@@ -159,7 +158,7 @@ export function RegisterRoutes(app: express.Express) {
       const promise = controller.trueRemove.apply(controller, validatedArgs as any);
       promiseHandler(controller, promise, response, next);
     });
-    app.get('/api/v1/summoners', [checkJwt],
+  app.get('/api/v1/summoners', [checkJwt],
     function(request: any, response: any, next: any) {
       const args = {
       };
@@ -509,212 +508,6 @@ export function RegisterRoutes(app: express.Express) {
       }
 
       const controller = new databaseController();
-
-
-      const promise = controller.remove.apply(controller, validatedArgs as any);
-      promiseHandler(controller, promise, response, next);
-    });
-  app.get('/api/v1/retries', [checkJwt],
-    function(request: any, response: any, next: any) {
-      const args = {
-      };
-
-      let validatedArgs: any[] = [];
-      try {
-        validatedArgs = getValidatedArgs(args, request);
-      } catch (err) {
-        return next(err);
-      }
-
-      const controller = new retriesController();
-
-
-      const promise = controller.getAll.apply(controller, validatedArgs as any);
-      promiseHandler(controller, promise, response, next);
-    });
-  app.get('/api/v1/retries/:id', [checkJwt],
-    function(request: any, response: any, next: any) {
-      const args = {
-        id: { "in": "path", "name": "id", "required": true, "dataType": "string" },
-      };
-
-      let validatedArgs: any[] = [];
-      try {
-        validatedArgs = getValidatedArgs(args, request);
-      } catch (err) {
-        return next(err);
-      }
-
-      const controller = new retriesController();
-
-
-      const promise = controller.getOne.apply(controller, validatedArgs as any);
-      promiseHandler(controller, promise, response, next);
-    });
-  app.post('/api/v1/retries', [checkJwt, checkRol],
-    function(request: any, response: any, next: any) {
-      const args = {
-        userId: { "in": "body-prop", "name": "userId", "required": true, "dataType": "string" },
-        action: { "in": "body-prop", "name": "action", "required": true, "dataType": "string" },
-        retries: { "in": "body-prop", "name": "retries", "default": 0, "required": true, "dataType": "string" },
-        first: { "in": "body-prop", "name": "first", "required": true, "dataType": "datetime" },
-        last: { "in": "body-prop", "name": "last", "required": true, "dataType": "datetime" },
-      };
-
-      let validatedArgs: any[] = [];
-      try {
-        validatedArgs = getValidatedArgs(args, request);
-      } catch (err) {
-        return next(err);
-      }
-
-      const controller = new retriesController();
-
-
-      const promise = controller.create.apply(controller, validatedArgs as any);
-      promiseHandler(controller, promise, response, next);
-    });
-  app.put('/api/v1/retries/:id', [checkJwt, checkRol],
-    function(request: any, response: any, next: any) {
-      const args = {
-        id: { "in": "path", "name": "id", "required": true, "dataType": "string" },
-        userId: { "in": "body-prop", "name": "userId", "required": true, "dataType": "string" },
-        action: { "in": "body-prop", "name": "action", "required": true, "dataType": "string" },
-        retries: { "in": "body-prop", "name": "retries", "required": true, "dataType": "double" },
-        first: { "in": "body-prop", "name": "first", "required": true, "dataType": "datetime" },
-        last: { "in": "body-prop", "name": "last", "required": true, "dataType": "datetime" },
-      };
-
-      let validatedArgs: any[] = [];
-      try {
-        validatedArgs = getValidatedArgs(args, request);
-      } catch (err) {
-        return next(err);
-      }
-
-      const controller = new retriesController();
-
-
-      const promise = controller.update.apply(controller, validatedArgs as any);
-      promiseHandler(controller, promise, response, next);
-    });
-  app.delete('/api/v1/retries/:id', [checkJwt, checkRol],
-    function(request: any, response: any, next: any) {
-      const args = {
-        id: { "in": "path", "name": "id", "required": true, "dataType": "string" },
-      };
-
-      let validatedArgs: any[] = [];
-      try {
-        validatedArgs = getValidatedArgs(args, request);
-      } catch (err) {
-        return next(err);
-      }
-
-      const controller = new retriesController();
-
-
-      const promise = controller.remove.apply(controller, validatedArgs as any);
-      promiseHandler(controller, promise, response, next);
-    });
-  app.get('/api/v1/summonerStats', [checkJwt],
-    function(request: any, response: any, next: any) {
-      const args = {
-      };
-
-      let validatedArgs: any[] = [];
-      try {
-        validatedArgs = getValidatedArgs(args, request);
-      } catch (err) {
-        return next(err);
-      }
-
-      const controller = new summonerStatsController();
-
-
-      const promise = controller.getAll.apply(controller, validatedArgs as any);
-      promiseHandler(controller, promise, response, next);
-    });
-  app.get('/api/v1/summonerStats/:id', [checkJwt],
-    function(request: any, response: any, next: any) {
-      const args = {
-        id: { "in": "path", "name": "id", "required": true, "dataType": "string" },
-      };
-
-      let validatedArgs: any[] = [];
-      try {
-        validatedArgs = getValidatedArgs(args, request);
-      } catch (err) {
-        return next(err);
-      }
-
-      const controller = new summonerStatsController();
-
-
-      const promise = controller.getOne.apply(controller, validatedArgs as any);
-      promiseHandler(controller, promise, response, next);
-    });
-  app.post('/api/v1/summonerStats', [checkJwt],
-    function(request: any, response: any, next: any) {
-      const args = {
-        userId: { "in": "body-prop", "name": "userId", "required": true, "dataType": "string" },
-        action: { "in": "body-prop", "name": "action", "required": true, "dataType": "string" },
-        summonerStats: { "in": "body-prop", "name": "summonerStats", "required": true, "dataType": "string" },
-        first: { "in": "body-prop", "name": "first", "required": true, "dataType": "datetime" },
-        last: { "in": "body-prop", "name": "last", "required": true, "dataType": "datetime" },
-      };
-
-      let validatedArgs: any[] = [];
-      try {
-        validatedArgs = getValidatedArgs(args, request);
-      } catch (err) {
-        return next(err);
-      }
-
-      const controller = new summonerStatsController();
-
-
-      const promise = controller.create.apply(controller, validatedArgs as any);
-      promiseHandler(controller, promise, response, next);
-    });
-  app.put('/api/v1/summonerStats/:id', [checkJwt],
-    function(request: any, response: any, next: any) {
-      const args = {
-        id: { "in": "path", "name": "id", "required": true, "dataType": "string" },
-        userId: { "in": "body-prop", "name": "userId", "required": true, "dataType": "string" },
-        action: { "in": "body-prop", "name": "action", "required": true, "dataType": "string" },
-        summonerStats: { "in": "body-prop", "name": "summonerStats", "required": true, "dataType": "double" },
-        first: { "in": "body-prop", "name": "first", "required": true, "dataType": "datetime" },
-        last: { "in": "body-prop", "name": "last", "required": true, "dataType": "datetime" },
-      };
-
-      let validatedArgs: any[] = [];
-      try {
-        validatedArgs = getValidatedArgs(args, request);
-      } catch (err) {
-        return next(err);
-      }
-
-      const controller = new summonerStatsController();
-
-
-      const promise = controller.update.apply(controller, validatedArgs as any);
-      promiseHandler(controller, promise, response, next);
-    });
-  app.delete('/api/v1/summonerStats/:id', [checkJwt],
-    function(request: any, response: any, next: any) {
-      const args = {
-        id: { "in": "path", "name": "id", "required": true, "dataType": "string" },
-      };
-
-      let validatedArgs: any[] = [];
-      try {
-        validatedArgs = getValidatedArgs(args, request);
-      } catch (err) {
-        return next(err);
-      }
-
-      const controller = new summonerStatsController();
 
 
       const promise = controller.remove.apply(controller, validatedArgs as any);
