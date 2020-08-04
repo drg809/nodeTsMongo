@@ -2,7 +2,7 @@ import { summonersModel, ISummoner} from '../models/summoners';
 import { Route, Get, Controller, Post, BodyProp, Put, Delete, SuccessResponse } from 'tsoa';
 import * as mongoose from "mongoose";
 import { summonersEntriesModel, ISummonerEntries } from '../models/summonerEntries';
-import { summonersMatchesModel, ISummonerMatches } from '../models/summonerMatches';
+import { summonersMatchesModel, ISummonerMatches } from '../middleware/summonerMatches';
 import { participantsModel, IParticipant } from '../models/participants';
 require('dotenv').config();
 
@@ -65,7 +65,7 @@ export class summonersController extends Controller {
     }
 
     @Get('/summoners/entries/{id}')
-    public async getEntriesBySummoner(userId: string) : Promise<any> {
+    public async getEntriesBySummoner(@BodyProp('userId') userId: string) : Promise<any> {
         let item: ISummoner = await summonersModel.findOne({userId: userId});
         api.get('euw1', 'tftLeague.getLeagueEntriesForSummoner', item.puuid ).then(data => {
           console.log(data);
@@ -73,7 +73,7 @@ export class summonersController extends Controller {
     }
 
     @Get('/summoners/match_history/{id}')
-    public async getMatchHistory(userId: string) : Promise<any> {
+    public async getMatchHistory(@BodyProp('userId') userId: string) : Promise<any> {
         try {
             let item: ISummonerMatches[] = await summonersMatchesModel.find({userId: userId, 'data.info.queue_id': {$eq: 1100}});
             return item;
@@ -84,7 +84,7 @@ export class summonersController extends Controller {
     }
 
     @Get('/summoners/users/{id}')
-    public async getAllByUserId(id: string) : Promise<any[]> {
+    public async getAllByUserId(@BodyProp('id') id: string) : Promise<any[]> {
         try {
             let items: any[] = await summonersModel.find({userId: id, deletedAt: { $eq: null }});
             items = items.map((item) => { return {
@@ -244,7 +244,7 @@ export class summonersController extends Controller {
     }
 
     @Delete('/summoners/{id}')
-    public async remove(id: string): Promise<void> {
+    public async remove(@BodyProp('id') id: string): Promise<void> {
         await summonersModel.findOneAndUpdate({_id: id, deletedAt: { $eq: null }}, { $set: {
             deletedAt: new Date()
         } } );
