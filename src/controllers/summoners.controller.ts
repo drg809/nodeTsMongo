@@ -69,7 +69,7 @@ export class summonersController extends Controller {
     @Post('/summoners/leagueEntries')
     public async getEntriesCommonLeagues() {
         try {
-
+            this.summonersStatsDelete(config.leagues);
             for (const l of config.leagues) {
               for (const r of config.rank) {
                 api.get('euw1', 'tftLeague.getLeagueEntries', l, r ).then(data => {
@@ -104,7 +104,7 @@ export class summonersController extends Controller {
     @Post('/summoners/apexLeagues')
     public async getEntriesApexLeagues() {
         try {
-
+            this.summonersStatsDelete(config.apexLeagues);
             for (const r of config.apexLeagues) {
               api.get('euw1', 'tftLeague.' + r ).then(data => {
                 for (const p of data.entries) {
