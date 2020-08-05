@@ -1,12 +1,12 @@
 import { Route, Get, Controller, Post, BodyProp, Put, Delete, SuccessResponse } from 'tsoa';
-import { summonerStatsModel, ISummonerStats} from '../models/summonerStats';
+import { summonersStatsModel, ISummonerStats} from '../models/summonerStats';
 
 @Route('/')
 export class summonerStatsController extends Controller {
     @Get('/summonerStats')
     public async getAll() : Promise<any[]> {
         try {
-            let items: any[] = await summonerStatsModel.find({});
+            let items: any[] = await summonersStatsModel.find({});
             items = items.map((item) => { return {
                 id: item._id,
                 userId: item.userId,
@@ -26,7 +26,7 @@ export class summonerStatsController extends Controller {
     @Get('/summonerStats/{id}')
     public async getOne(id: string) : Promise<any[]> {
         try {
-            let item: any = await summonerStatsModel.findOne({_id: id});
+            let item: any = await summonersStatsModel.findOne({_id: id});
             return item;
         } catch (err) {
             this.setStatus(500);
@@ -40,7 +40,7 @@ export class summonerStatsController extends Controller {
      @BodyProp('summonerStats') summonerStats: string,
      @BodyProp('first') first: Date,
      @BodyProp('last') last: Date ): Promise<any> {
-        const item = new summonerStatsModel({
+        const item = new summonersStatsModel({
           userId: userId,
           action: action,
           summonerStats: summonerStats,
@@ -58,7 +58,7 @@ export class summonerStatsController extends Controller {
       @BodyProp('summonerStats') summonerStats: number,
       @BodyProp('first') first: Date,
       @BodyProp('last') last: Date ): Promise<void> {
-        await summonerStatsModel.findOneAndUpdate({_id: id}, { $set: {
+        await summonersStatsModel.findOneAndUpdate({_id: id}, { $set: {
           userId: userId,
           action: action,
           summonerStats: summonerStats,
@@ -69,6 +69,6 @@ export class summonerStatsController extends Controller {
 
     @Delete('/summonerStats/{id}')
     public async remove(id: string): Promise<void> {
-        await summonerStatsModel.findByIdAndRemove(id);
+        await summonersStatsModel.findByIdAndRemove(id);
     }
 }

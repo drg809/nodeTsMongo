@@ -4,17 +4,17 @@ const summonerStatsSchema = new mongoose.Schema({
     id: { type: mongoose.Schema.Types.ObjectId, required: false },
     leagueId: { type: String, required: false },
     summonerId: { type: String, unique: true, required: false },
-    summonerName: { type: Number, required: false },
+    summonerName: { type: String, required: false },
     queueType: { type: String, required: false },
     tier: { type: String, required: false },
-    rank: { type: Number, required: false },
+    rank: { type: String, required: false },
     leaguePoints: { type: Number, required: false },
     wins: { type: Number, required: false },
     losses: { type: Number, required: false },
-    hotStreak: { type: Number, required: false },
-    veteran: { type: Number, required: false },
-    inactive: { type: Number, required: false },
-    freshBlood: { type: Number, required: false },
+    hotStreak: { type: Boolean, required: false },
+    veteran: { type: Boolean, required: false },
+    inactive: { type: Boolean, required: false },
+    freshBlood: { type: Boolean, required: false },
     miniSeries: [{
       losses:	{ type: Number, required: false },
       progress:	{ type: String, required: false },
@@ -45,6 +45,6 @@ export interface ISummonerStats extends mongoose.Document {
   }
 };
 
-const summonerStatsModel = mongoose.model<ISummonerStats>('summonerStats', summonerStatsSchema);
+const summonersStatsModel = mongoose.model<ISummonerStats>('summonersStats', summonerStatsSchema);
 
-export { summonerStatsModel }
+export { summonersStatsModel }

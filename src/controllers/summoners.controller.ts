@@ -4,6 +4,8 @@ import * as mongoose from "mongoose";
 import { summonersEntriesModel, ISummonerEntries } from '../models/summonerEntries';
 import { summonersMatchesModel, ISummonerMatches } from '../models/summonerMatches';
 import { participantsModel, IParticipant } from '../models/participants';
+import { summonersStatsModel, ISummonerStats } from '../models/summonerStats';
+import config from '../helpers/config';
 require('dotenv').config();
 
 
@@ -57,6 +59,53 @@ export class summonersController extends Controller {
               ++num;
             }
 
+            return item;
+        } catch (err) {
+            this.setStatus(500);
+            console.error('Caught error', err);
+        }
+    }
+
+    @Post('/summoners/leagueEntries')
+    public async getEntriesCommonLeagues() {
+        try {
+            for (const l of config.leagues) {
+              for (const r of config.rank) {
+                api.get('euw1', 'tftLeague.getLeagueEntries', l, r ).then(data => {
+                  for (const p of data) {
+                    let stats: ISummonerStats = new summonersStatsModel({
+                      leagueId: p.leagueId,
+                      summonerId: p.summonerId,
+                      summonerName: p.summonerName,
+                      queueType: p.queueType,
+                      tier: p.tier,
+                      rank: p.rank,
+                      leaguePoints: p.leaguePoints,
+                      wins: p.wins,
+                      losses: p.losses,
+                      hotStreak: p.hotStreak,
+                      veteran: p.veteran,
+                      freshBlood: p.freshBlood,
+                      inactive: p.inactive
+                    });
+                    stats.save();
+                  }
+                });
+              }
+            }
+        } catch (err) {
+            this.setStatus(500);
+            console.error('Caught error', err);
+        }
+    }
+
+    @Get('/summonerStats/entries')
+    public async getEntriesApexLeagues() : Promise<any[]> {
+        try {
+            let item: any = await summonersStatsModel.find();
+            api.get('euw1', 'tftLeague.getLeagueEntries', item.puuid ).then(data => {
+              console.log(data);
+            });
             return item;
         } catch (err) {
             this.setStatus(500);
