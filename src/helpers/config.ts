@@ -8,5 +8,19 @@ export default {
         'updateSumHis',
         'update'
     ],
-    mongoUrl: 'mongodb://127.0.0.1:27017/tftanalitics'
+    mongoUrl: 'mongodb://127.0.0.1:27017/tftanalitics',
+    leagues: [
+        'IRON',
+        'BRONZE',
+        'SILVER',
+        'GOLD',
+        'PLATINUM',
+        'DIAMOND'
+    ],
+    rank: [
+        'I',
+        'II',
+        'III',
+        'IV'
+    ]
 };
