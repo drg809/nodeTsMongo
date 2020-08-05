@@ -93,20 +93,39 @@ export class summonersController extends Controller {
                 });
               }
             }
+            return true;
         } catch (err) {
             this.setStatus(500);
             console.error('Caught error', err);
         }
     }
 
-    @Get('/summonerStats/entries')
-    public async getEntriesApexLeagues() : Promise<any[]> {
+    @Post('/summoners/apexLeagues')
+    public async getEntriesApexLeagues() {
         try {
-            let item: any = await summonersStatsModel.find();
-            api.get('euw1', 'tftLeague.getLeagueEntries', item.puuid ).then(data => {
-              console.log(data);
-            });
-            return item;
+            for (const r of config.apexLeagues) {
+              api.get('euw1', 'tftLeague.' + r ).then(data => {
+                for (const p of data.entries) {
+                  let stats: ISummonerStats = new summonersStatsModel({
+                    leagueId: data.leagueId,
+                    summonerId: p.summonerId,
+                    summonerName: p.summonerName,
+                    queueType: data.queue,
+                    tier: data.tier,
+                    rank: p.rank,
+                    leaguePoints: p.leaguePoints,
+                    wins: p.wins,
+                    losses: p.losses,
+                    hotStreak: p.hotStreak,
+                    veteran: p.veteran,
+                    freshBlood: p.freshBlood,
+                    inactive: p.inactive
+                  });
+                  stats.save();
+                }
+              });
+            }
+            return true;
         } catch (err) {
             this.setStatus(500);
             console.error('Caught error', err);
