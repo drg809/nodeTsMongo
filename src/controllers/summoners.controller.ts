@@ -2,7 +2,7 @@ import { summonersModel, ISummoner} from '../models/summoners';
 import { Route, Get, Controller, Post, BodyProp, Put, Delete, SuccessResponse } from 'tsoa';
 import * as mongoose from "mongoose";
 import { summonersEntriesModel, ISummonerEntries } from '../models/summonerEntries';
-import { summonersMatchesModel, ISummonerMatches } from '../middleware/summonerMatches';
+import { summonersMatchesModel, ISummonerMatches } from '../models/summonerMatches';
 import { participantsModel, IParticipant } from '../models/participants';
 require('dotenv').config();
 
