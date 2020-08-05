@@ -22,5 +22,10 @@ export default {
         'II',
         'III',
         'IV'
+    ],
+    apexLeagues: [
+        'getMasterLeague',
+        'getGrandmasterLeague',
+        'getChallengerLeague'
     ]
 };
