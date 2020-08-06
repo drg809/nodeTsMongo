@@ -23,9 +23,14 @@ export default {
         'III',
         'IV'
     ],
-    apexLeagues: [
+    apexLeaguesEndpoints: [
         'getMasterLeague',
         'getGrandmasterLeague',
         'getChallengerLeague'
-    ]
+    ],
+    apexLeaguesNames: [
+      'MASTER',
+      'GRANDMASTER',
+      'CHALLENGER'
+  ]
 };
