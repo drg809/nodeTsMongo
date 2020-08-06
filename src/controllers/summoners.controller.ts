@@ -66,7 +66,7 @@ export class summonersController extends Controller {
         }
     }
 
-    @Post('/summoners/leagueEntries')
+    @Post('/summoners/leagueEntries_ext')
     public async getEntriesCommonLeagues() {
         try {
             this.summonersStatsDelete(config.leagues);
@@ -101,7 +101,7 @@ export class summonersController extends Controller {
         }
     }
 
-    @Post('/summoners/apexLeagues')
+    @Post('/summoners/apexLeagues_ext')
     public async getEntriesApexLeagues() {
         try {
             this.summonersStatsDelete(config.apexLeagues);

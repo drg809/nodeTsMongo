@@ -215,7 +215,7 @@ export function RegisterRoutes(app: express.Express) {
       const promise = controller.getMatchHistory.apply(controller, validatedArgs as any);
       promiseHandler(controller, promise, response, next);
     });
-  app.post('/api/v1/summoners/leagueEntries', [checkJwt, checkRol],
+  app.post('/api/v1/summoners/leagueEntries_ext', [checkJwt, checkRol],
     function(request: any, response: any, next: any) {
       const args = {
       };
@@ -228,7 +228,7 @@ export function RegisterRoutes(app: express.Express) {
       const promise = controller.getEntriesCommonLeagues.apply(controller, validatedArgs as any);
       promiseHandler(controller, promise, response, next);
     });
-  app.post('/api/v1/summoners/apexLeagues', [checkJwt, checkRol],
+  app.post('/api/v1/summoners/apexLeagues_ext', [checkJwt, checkRol],
     function(request: any, response: any, next: any) {
       const args = {
       };
