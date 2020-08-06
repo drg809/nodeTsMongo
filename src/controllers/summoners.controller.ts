@@ -6,6 +6,7 @@ import { summonersMatchesModel, ISummonerMatches } from '../models/summonerMatch
 import { participantsModel, IParticipant } from '../models/participants';
 import { summonersStatsModel, ISummonerStats } from '../models/summonerStats';
 import config from '../helpers/config';
+import { usersController } from './users.controller';
 require('dotenv').config();
 
 
@@ -133,6 +134,7 @@ export class summonersController extends Controller {
             console.error('Caught error', err);
         }
     }
+
 
     @Get('/summoners/entries/{id}')
     public async getEntriesBySummoner(@BodyProp('userId') userId: string) : Promise<any> {
@@ -307,10 +309,9 @@ export class summonersController extends Controller {
     }
 
     @Put('/summoners/main/{id}')
-    public async setMain(@BodyProp('id') id: string,@BodyProp('main') main: boolean) {
-        await summonersModel.findOneAndUpdate({_id: id, deletedAt: { $eq: null }}, { $set: {
-            main: main
-        } } );
+    public async setMain(@BodyProp('id') id: string, @BodyProp('userId') userId: string,@BodyProp('main') main: boolean) {
+        await summonersModel.updateMany({userId: userId, main: true, deletedAt: { $eq: null }}, { $set: { main: false } } );
+        await summonersModel.findOneAndUpdate({_id: id, deletedAt: { $eq: null }}, { $set: { main: main } } );
     }
 
     @Delete('/summoners/{id}')
