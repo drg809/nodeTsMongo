@@ -105,8 +105,8 @@ export class summonersController extends Controller {
     @Post('/summoners/apexLeagues_ext')
     public async getEntriesApexLeagues() {
         try {
-            this.summonersStatsDelete(config.apexLeagues);
-            for (const r of config.apexLeagues) {
+            this.summonersStatsDelete(config.apexLeaguesNames);
+            for (const r of config.apexLeaguesEndpoints) {
               api.get('euw1', 'tftLeague.' + r ).then(data => {
                 for (const p of data.entries) {
                   let stats: ISummonerStats = new summonersStatsModel({
@@ -135,6 +135,15 @@ export class summonersController extends Controller {
         }
     }
 
+    @Post('/summoners/stats')
+    public async getSummonerStats(req: Request) {
+        const auth = usersController.getTokenPayload(req);
+        let sum = await summonersModel.findOne({userId: auth.id, main: true});
+        console.log(sum);
+        let stats = await summonersStatsModel.findOne({summonerName: sum.summonerName});
+        console.log(stats);
+        return stats;
+    }
 
     @Get('/summoners/entries/{id}')
     public async getEntriesBySummoner(@BodyProp('userId') userId: string) : Promise<any> {
@@ -326,7 +335,7 @@ export class summonersController extends Controller {
         await summonersModel.findByIdAndRemove(id);
     }
 
-    private async summonersStatsDelete(params: any): Promise<void> {
-        await summonersStatsModel.deleteMany({tier: { $in: [params]}});
+    private async summonersStatsDelete(params: any) {
+        await summonersStatsModel.deleteMany({tier: { $in: params}});
     }
 }
