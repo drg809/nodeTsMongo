@@ -4,7 +4,7 @@ const summonerStatsSchema = new mongoose.Schema({
     id: { type: mongoose.Schema.Types.ObjectId, required: false },
     leagueId: { type: String, required: false },
     summonerId: { type: String, unique: true, required: false },
-    summonerName: { type: String, required: false },
+    summonerName: { type: String, unique: true, required: false },
     queueType: { type: String, required: false },
     tier: { type: String, required: false },
     rank: { type: String, required: false },
