@@ -50,10 +50,9 @@ export class usersController extends Controller {
             user.password = "";
             //user.token = token;
             //this.updateToken(user._id,token);
-            //let sum = await summonersModel.findOne({userId: user._id});
-            //console.log(sum);
-            user.puuid = '3U9Cbs9gIE86er_svec4HWddvFAXhSFQ5HPE3tYM8ahUqk3lBtnaHXMjmo3916HUKDpwLLR0AgQnlw';
-            user.main = '5f1f4014a5b8673172618d14';
+            let sum = await summonersModel.findOne({userId: user._id, main: true});
+            user.puuid = sum.puuid;
+            user.main = sum.id;
             return user;
         } else {
             this.setStatus(500);
@@ -135,5 +134,17 @@ export class usersController extends Controller {
           console.error('Caught error', err);
       }
     }
+
+    static getTokenPayload = (req: Request): any => {
+      let token = <string>req.headers['authorization'];
+      //Try to validate the token and get data
+      try {
+          token = token.replace('Bearer ', '');
+          return <any>jwt.verify(token, config.jwtSecret);
+      } catch (e) {
+          console.log(e);
+          return undefined;
+      }
+    };
 
 }
