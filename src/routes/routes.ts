@@ -386,6 +386,7 @@ export function RegisterRoutes(app: express.Express) {
       console.log('paco');
       const args = {
         id: { "in": "path", "name": "id", "required": true, "dataType": "string" },
+        userId: { "in": "body-prop", "name": "userId", "required": true, "dataType": "string" },
         main: { "in": "body-prop", "name": "main", "required": true, "dataType": "boolean" }
       };
 
