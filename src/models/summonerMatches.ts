@@ -18,7 +18,7 @@ const summonersMatchesSchema = new mongoose.Schema({
       metadata: {
         data_version: Number,
         match_id: String,
-        participants: [ParticipantsSchema]
+        participants: [String]
       },
       info: {
         game_datetime: Number,
