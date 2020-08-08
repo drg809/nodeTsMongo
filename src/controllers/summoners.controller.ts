@@ -139,6 +139,9 @@ export class summonersController extends Controller {
     @Post('/summoners/stats')
     public async getSummonerStats(req: Request) {
         let top1: number = 0; let top2: number = 0; let top3: number = 0; let top4: number = 0; let top5: number = 0; let top6: number = 0; let top7: number = 0; let top8: number = 0;
+        let counts = {};
+        let u = [];
+        let n = [];
         const auth = usersController.getTokenPayload(req);
         let sum: ISummoner = await summonersModel.findOne({userId: auth.id, main: true});
         let stats: ISummonerStats = await summonersStatsModel.findOne({summonerName:{ $regex : new RegExp(sum.summonerName, "i") }});
@@ -170,9 +173,12 @@ export class summonersController extends Controller {
             default:
               stats.positions.top8++;
           }
-        };
 
-        console.log(stats.positions);
+          if(x.data.placement < 5) {
+              counts[x.data.game_variation] = (counts[x.data.game_variation] || 0)+1;
+          }
+        };
+        stats.count = counts;
         return stats;
     }
 
