@@ -287,8 +287,7 @@ export class summonersController extends Controller {
                       });
                     }
                     let s: ISummoner = await summonersModel.findOne({userId: userId, deletedAt: { $eq: null }});
-                    const d: ISummonerMatchesDetails = await summonersMatchesDetailsModel.findOne({userId: userId, entrie: ent.entrie});
-                    if (x.puuid == s.puuid && !d) {
+                    if (x.puuid == s.puuid) {
                       let details = new summonersMatchesDetailsModel({
                         userId: ent.userId,
                         entrie: ent.entrie,
