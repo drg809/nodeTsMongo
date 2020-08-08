@@ -139,9 +139,7 @@ export class summonersController extends Controller {
     public async getSummonerStats(req: Request) {
         const auth = usersController.getTokenPayload(req);
         let sum = await summonersModel.findOne({userId: auth.id, main: true});
-        console.log(sum);
-        let stats = await summonersStatsModel.findOne({summonerName: sum.summonerName});
-        console.log(stats);
+        let stats = await summonersStatsModel.findOne({summonerName:{ $regex : new RegExp(sum.summonerName, "i") }});
         return stats;
     }
 
@@ -153,11 +151,18 @@ export class summonersController extends Controller {
         });
     }
 
-    @Get('/summoners/match_history/{id}')
-    public async getMatchHistory(@BodyProp('userId') userId: string) : Promise<any> {
+    @Post('/summoners/match_history/{id}')
+    public async getMatchHistory(req: any) : Promise<any> {
+        const resPerPage = 10;
+        const page = req.params.page || 1;
         try {
-            let item: ISummonerMatches[] = await summonersMatchesModel.find({userId: userId, 'data.info.queue_id': {$eq: 1100}});
-            return item;
+            let item: ISummonerMatches[] = await summonersMatchesModel.find({userId: req.params.id, 'data.info.queue_id': {$eq: 1100}})
+            .sort({'data.info.game_datetime': -1})
+            .skip((resPerPage * page) - resPerPage)
+            .limit(resPerPage);
+            let numOfProducts = await summonersMatchesModel.count({userId: req.params.id, 'data.info.queue_id': {$eq: 1100}})
+            const res = {data: item, pageIndex: page, pageSize: resPerPage, pages: Math.ceil(numOfProducts / resPerPage), numResult: numOfProducts};
+            return res;
         } catch (err) {
             this.setStatus(500);
             console.error('Caught error', err);
@@ -222,12 +227,15 @@ export class summonersController extends Controller {
         try {
           api.get('europe', 'tftMatch.getMatchIdsByPUUID', sum.puuid ).then(res => {
             data = res;
-            data.forEach(value => {
-              let sumE = new summonersEntriesModel({
-                userId: sum.userId,
-                entrie: value
-              });
-              sumE.save();
+            data.forEach(async value => {
+              let match: ISummonerMatches = await summonersMatchesModel.findOne({entrie: value});
+              if(!match) {
+                let sumE = new summonersEntriesModel({
+                  userId: sum.userId,
+                  entrie: value
+                });
+                sumE.save();
+              }
             });
             return data;
           });
@@ -239,7 +247,7 @@ export class summonersController extends Controller {
     }
 
     @Post('/summoners/match_info_ext')
-    public async setLastMatchInfoExt(@BodyProp('userId') userId: string ): Promise<any> {
+    public async setLastMatchInfoExt(@BodyProp('userId') userId: string ) {
         this.getMatchesExt(userId);
         let sum: ISummonerEntries[] = await summonersEntriesModel.find({userId: userId});
         let data: any[];
@@ -277,15 +285,17 @@ export class summonersController extends Controller {
 
                       });
                     }
+
                   });
-                  return data;
+                  // sumE.data.info.participants.forEach(async x => {
+                  // });
                 });
 
               }
             }, 100);
 
           });
-
+          return sum;
 
         } catch (err) {
           console.log('Error:' + err);
