@@ -20,7 +20,13 @@ const summonersMatchesDetailsSchema = new mongoose.Schema({
         time_eliminated: Number,
         total_damage_to_players: Number,
         traits: Object,
-        units: Object,
+        units: [{
+          character_id: String,
+          items: [Number],
+          name: String,
+          rarity: Number,
+          tier: Number
+        }],
         queue_id: Number,
         tft_set_number: Number
       }
@@ -48,7 +54,13 @@ export interface ISummonerMatchesDetails extends mongoose.Document {
       time_eliminated: number,
       total_damage_to_players: number,
       traits: object,
-      units: object,
+      units: [{
+        character_id: string,
+        items: [number],
+        name: string,
+        rarity: number,
+        tier: number
+      }],
       queue_id: number,
       tft_set_number: number
     }
