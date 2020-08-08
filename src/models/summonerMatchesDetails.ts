@@ -10,7 +10,6 @@ const summonersMatchesDetailsSchema = new mongoose.Schema({
         game_length: Number,
         game_variation: String,
         game_version: String,
-        name: String,
         companion: Object,
         gold_left: Number,
         last_round: Number,
@@ -30,7 +29,7 @@ const summonersMatchesDetailsSchema = new mongoose.Schema({
 
 summonersMatchesDetailsSchema.index({userId: 1, entrie: 1}, {unique: true});
 
-export interface ISummonerMatches extends mongoose.Document {
+export interface ISummonerMatchesDetails extends mongoose.Document {
     userId?: string,
     entrie?: string,
     data?: {
@@ -39,7 +38,6 @@ export interface ISummonerMatches extends mongoose.Document {
       game_length: number,
       game_variation: string,
       game_version: string,
-      name?: string,
       companion: object,
       gold_left: number,
       last_round: number,
@@ -56,6 +54,6 @@ export interface ISummonerMatches extends mongoose.Document {
     }
 };
 
-const summonersMatchesDetailsModel = mongoose.model<ISummonerMatches>('summonersMatchesDetails', summonersMatchesDetailsSchema);
+const summonersMatchesDetailsModel = mongoose.model<ISummonerMatchesDetails>('summonersMatchesDetails', summonersMatchesDetailsSchema);
 
 export { summonersMatchesDetailsModel }
