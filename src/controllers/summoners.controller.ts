@@ -138,17 +138,49 @@ export class summonersController extends Controller {
 
     @Post('/summoners/stats')
     public async getSummonerStats(req: Request) {
+        let top1: number = 0; let top2: number = 0; let top3: number = 0; let top4: number = 0; let top5: number = 0; let top6: number = 0; let top7: number = 0; let top8: number = 0;
         const auth = usersController.getTokenPayload(req);
-        let sum = await summonersModel.findOne({userId: auth.id, main: true});
-        let stats = await summonersStatsModel.findOne({summonerName:{ $regex : new RegExp(sum.summonerName, "i") }});
+        let sum: ISummoner = await summonersModel.findOne({userId: auth.id, main: true});
+        let stats: ISummonerStats = await summonersStatsModel.findOne({summonerName:{ $regex : new RegExp(sum.summonerName, "i") }});
+        let matches: ISummonerMatchesDetails[] = await summonersMatchesDetailsModel.find({userId: auth.id});
+        stats.positions = {top1: top1,top2: top2,top3: top3,top4: top4,top5: top5,top6: top6,top7: top7,top8: top8, total: matches.length + 1};
+        for (const x of matches) {
+          switch(x.data.placement){
+            case 1:
+              stats.positions.top1++;
+              break;
+            case 2:
+              stats.positions.top2++;
+              break;
+            case 3:
+              stats.positions.top3++;
+              break;
+            case 4:
+              stats.positions.top4++;
+              break;
+            case 5:
+              stats.positions.top5++;
+              break;
+            case 6:
+              stats.positions.top6++;
+              break;
+            case 7:
+              stats.positions.top7++;
+              break;
+            default:
+              stats.positions.top8++;
+          }
+        };
+
+        console.log(stats.positions);
         return stats;
     }
 
     @Get('/summoners/entries/{id}')
     public async getEntriesBySummoner(@BodyProp('userId') userId: string) : Promise<any> {
         let item: ISummoner = await summonersModel.findOne({userId: userId});
-        api.get('euw1', 'tftLeague.getLeagueEntriesForSummoner', item.puuid ).then(data => {
-          console.log(data);
+        api.get('euw1', 'tftLeague.getLeagueEntriesForSummoner', item.puuid ).then(x => {
+          console.log(x);
         });
     }
 
