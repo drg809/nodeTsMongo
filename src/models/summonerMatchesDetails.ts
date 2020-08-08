@@ -3,7 +3,7 @@ import * as mongoose from "mongoose";
 const summonersMatchesDetailsSchema = new mongoose.Schema({
     id: { type: mongoose.Schema.Types.ObjectId, required: false },
     userId: { type: mongoose.Schema.Types.ObjectId, required: true },
-    entrie: { type: String, unique : true, required : true, dropDups: true },
+    entrie: { type: String, required : true, dropDups: true },
     data:  {
         match_id: String,
         game_datetime: Number,
@@ -27,6 +27,8 @@ const summonersMatchesDetailsSchema = new mongoose.Schema({
       }
 
 });
+
+summonersMatchesDetailsSchema.index({userId: 1, entrie: 1}, {unique: true});
 
 export interface ISummonerMatches extends mongoose.Document {
     userId?: string,
