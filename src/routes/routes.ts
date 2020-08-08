@@ -250,13 +250,13 @@ export function RegisterRoutes(app: express.Express) {
       promiseHandler(controller, promise, response, next);
     });
   app.post('/api/v1/summoners/stats', [checkJwt],
-    function(request: any, response: any, next: any) {
+    async function(request: any, response: any, next: any) {
 
 
       const controller = new summonersController();
 
       const promise = controller.getSummonerStats(request);
-      promiseHandler(controller, promise, response, next);
+      await promiseHandler(controller, promise, response, next);
     });
   app.get('/api/v1/summoners/users/:id', [checkJwt],
     function(request: any, response: any, next: any) {
