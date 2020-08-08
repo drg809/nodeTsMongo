@@ -7,6 +7,7 @@ import { participantsModel, IParticipant } from '../models/participants';
 import { summonersStatsModel, ISummonerStats } from '../models/summonerStats';
 import config from '../helpers/config';
 import { usersController } from './users.controller';
+import { summonersMatchesDetailsModel, ISummonerMatchesDetails } from '../models/summonerMatchesDetails';
 require('dotenv').config();
 
 
@@ -237,7 +238,7 @@ export class summonersController extends Controller {
                 sumE.save();
               }
             });
-            return data;
+            return sum;
           });
 
         } catch (err) {
@@ -264,10 +265,10 @@ export class summonersController extends Controller {
                     data: res
                   });
                   sumE.save();
-                  sumE.data.metadata.participants.forEach(async x => {
-                    let part: IParticipant = await participantsModel.findOne({puuid: x});
+                  sumE.data.info.participants.forEach(async x => {
+                    let part: IParticipant = await participantsModel.findOne({puuid: x.puuid});
                     if(!part) {
-                      api.get('euw1', 'tftSummoner.getByPUUID', x ).then(data => {
+                      api.get('euw1', 'tftSummoner.getByPUUID', x.puuid ).then(data => {
                         let item = new participantsModel({
                           summonerName: data.name,
                           puuid: data.puuid,
@@ -285,17 +286,43 @@ export class summonersController extends Controller {
 
                       });
                     }
-
+                    let s: ISummoner = await summonersModel.findOne({userId: userId, deletedAt: { $eq: null }});
+                    const d: ISummonerMatchesDetails = await summonersMatchesDetailsModel.findOne({userId: userId, entrie: ent.entrie});
+                    if (x.puuid == s.puuid && !d) {
+                      let details = new summonersMatchesDetailsModel({
+                        userId: ent.userId,
+                        entrie: ent.entrie,
+                        data: {
+                          match_id: sumE.data.metadata.match_id,
+                          game_datetime: sumE.data.info.game_datetime,
+                          game_length: sumE.data.info.game_length,
+                          game_variation: sumE.data.info.game_variation,
+                          game_version: sumE.data.info.game_version,
+                          companion: x.companion,
+                          gold_left: x.gold_left,
+                          last_round: x.last_round,
+                          level: x.level,
+                          placement: x.placement,
+                          players_eliminated: x.players_eliminated,
+                          puuid: x.puuid,
+                          time_eliminated: x.time_eliminated,
+                          total_damage_to_players: x.total_damage_to_players,
+                          traits: x.traits,
+                          units: x.units,
+                          queue_id: sumE.data.info.queue_id,
+                          tft_set_number: sumE.data.info.tft_set_number
+                        }
+                      });
+                      details.save();
+                    }
                   });
-                  // sumE.data.info.participants.forEach(async x => {
-                  // });
                 });
 
               }
             }, 100);
 
           });
-          return sum;
+          return data;
 
         } catch (err) {
           console.log('Error:' + err);
