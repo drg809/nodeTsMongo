@@ -154,7 +154,7 @@ export class summonersController extends Controller {
     @Post('/summoners/match_history/{id}')
     public async getMatchHistory(req: any) : Promise<any> {
         const resPerPage = 10;
-        const page = req.params.page || 1;
+        const page = req.body.page || 1;
         try {
             let item: ISummonerMatches[] = await summonersMatchesModel.find({userId: req.params.id, 'data.info.queue_id': {$eq: 1100}})
             .sort({'data.info.game_datetime': -1})
