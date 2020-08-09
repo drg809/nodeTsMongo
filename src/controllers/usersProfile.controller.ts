@@ -34,12 +34,14 @@ export class usersProfileController extends Controller {
     public async create(@BodyProp('name') name: string,
      @BodyProp('lastname') lastname: string,
      @BodyProp('phone') phone: string,
-     @BodyProp('country') country: number): Promise<any> {
+     @BodyProp('country') country: string,
+     @BodyProp('about') about: string): Promise<any> {
         const item = new usersProfileModel({
           name: name,
           lastname: lastname,
           phone: phone,
-          country: country
+          country: country,
+          about: about
         });
         await item.save();
         return item;
@@ -50,12 +52,14 @@ export class usersProfileController extends Controller {
      @BodyProp('name') name: string,
      @BodyProp('lastname') lastname: string,
      @BodyProp('phone') phone: string,
-     @BodyProp('country') country: string): Promise<void> {
+     @BodyProp('country') country: string,
+     @BodyProp('about') about: string): Promise<void> {
         await usersProfileModel.findOneAndUpdate({_id: id, deletedAt: { $eq: null }}, { $set: {
           name: name,
           lastname: lastname,
           phone: phone,
-          country: country
+          country: country,
+          about: about
         } } );
     }
 
