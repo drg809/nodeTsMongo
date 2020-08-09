@@ -194,10 +194,10 @@ export function RegisterRoutes(app: express.Express) {
   app.post('/api/v1/profile', [checkJwt],
     function(request: any, response: any, next: any) {
       const args = {
-        name: { "in": "body-prop", "name": "password", "required": true, "dataType": "string" },
-        lastname: { "in": "body-prop", "name": "token", "required": false, "dataType": "string" },
-        phone: { "in": "body-prop", "name": "name", "required": false, "dataType": "string" },
-        country: { "in": "body-prop", "name": "lastname", "required": false, "dataType": "string" }
+        name: { "in": "body-prop", "name": "name", "required": true, "dataType": "string" },
+        lastname: { "in": "body-prop", "name": "lastname", "required": false, "dataType": "string" },
+        phone: { "in": "body-prop", "name": "phone", "required": false, "dataType": "string" },
+        country: { "in": "body-prop", "name": "country", "required": false, "dataType": "string" }
       };
 
       let validatedArgs: any[] = [];
@@ -218,10 +218,9 @@ export function RegisterRoutes(app: express.Express) {
       const args = {
         id: { "in": "path", "name": "id", "required": true, "dataType": "string" },
         name: { "in": "body-prop", "name": "name", "required": true, "dataType": "string" },
-        lastname: { "in": "body-prop", "name": "lastname", "required": true, "dataType": "string" },
-        status: { "in": "body-prop", "name": "status", "required": true, "dataType": "double" },
-        role: { "in": "body-prop", "name": "role", "required": true, "dataType": "string" },
-        phone: { "in": "body-prop", "name": "phone", "required": true, "dataType": "string" },
+        lastname: { "in": "body-prop", "name": "lastname", "required": false, "dataType": "string" },
+        phone: { "in": "body-prop", "name": "phone", "required": false, "dataType": "string" },
+        country: { "in": "body-prop", "name": "country", "required": false, "dataType": "string" }
       };
 
       let validatedArgs: any[] = [];
