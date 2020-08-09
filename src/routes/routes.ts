@@ -197,7 +197,8 @@ export function RegisterRoutes(app: express.Express) {
         name: { "in": "body-prop", "name": "name", "required": true, "dataType": "string" },
         lastname: { "in": "body-prop", "name": "lastname", "required": false, "dataType": "string" },
         phone: { "in": "body-prop", "name": "phone", "required": false, "dataType": "string" },
-        country: { "in": "body-prop", "name": "country", "required": false, "dataType": "string" }
+        country: { "in": "body-prop", "name": "country", "required": false, "dataType": "string" },
+        about: { "in": "body-prop", "name": "about", "required": false, "dataType": "string" }
       };
 
       let validatedArgs: any[] = [];
@@ -220,7 +221,8 @@ export function RegisterRoutes(app: express.Express) {
         name: { "in": "body-prop", "name": "name", "required": true, "dataType": "string" },
         lastname: { "in": "body-prop", "name": "lastname", "required": false, "dataType": "string" },
         phone: { "in": "body-prop", "name": "phone", "required": false, "dataType": "string" },
-        country: { "in": "body-prop", "name": "country", "required": false, "dataType": "string" }
+        country: { "in": "body-prop", "name": "country", "required": false, "dataType": "string" },
+        about: { "in": "body-prop", "name": "about", "required": false, "dataType": "string" }
       };
 
       let validatedArgs: any[] = [];
