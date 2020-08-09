@@ -8,6 +8,7 @@ import * as express from 'express';
 import { checkJwt } from '../middleware/jwtchecker.middleware';
 import { summonersController } from '../controllers/summoners.controller';
 import { checkRol } from '../middleware/checkrol.middleware';
+import { usersProfileController } from '../controllers/usersProfile.controller';
 
 const models: TsoaRoute.Models = {
 };
@@ -159,7 +160,113 @@ export function RegisterRoutes(app: express.Express) {
       const promise = controller.trueRemove.apply(controller, validatedArgs as any);
       promiseHandler(controller, promise, response, next);
     });
-    app.get('/api/v1/summoners', [checkJwt],
+  app.get('/api/v1/profile', [checkJwt],
+    function(request: any, response: any, next: any) {
+      const args = {
+      };
+
+      let validatedArgs: any[] = [];
+      try {
+        validatedArgs = getValidatedArgs(args, request);
+      } catch (err) {
+        return next(err);
+      }
+
+      const controller = new usersProfileController();
+
+
+      const promise = controller.getAll.apply(controller, validatedArgs as any);
+      promiseHandler(controller, promise, response, next);
+    });
+  app.get('/api/v1/profile/:id', [checkJwt],
+    function(request: any, response: any, next: any) {
+      const args = {
+        id: { "in": "path", "name": "id", "required": true, "dataType": "string" },
+      };
+
+      let validatedArgs: any[] = [];
+      try {
+        validatedArgs = getValidatedArgs(args, request);
+      } catch (err) {
+        return next(err);
+      }
+
+      const controller = new usersProfileController();
+
+
+      const promise = controller.getOne.apply(controller, validatedArgs as any);
+      promiseHandler(controller, promise, response, next);
+    });
+  app.post('/api/v1/profile', [checkJwt],
+    function(request: any, response: any, next: any) {
+      const args = {
+        email: { "in": "body-prop", "name": "email", "required": true, "unique": true, "dataType": "string" },
+        password: { "in": "body-prop", "name": "password", "required": true, "dataType": "string" },
+        token: { "in": "body-prop", "name": "token", "required": false, "dataType": "string" },
+        name: { "in": "body-prop", "name": "name", "required": false, "dataType": "string" },
+        lastname: { "in": "body-prop", "name": "lastname", "required": false, "dataType": "string" },
+        status: { "in": "body-prop", "name": "status", "required": false, "dataType": "double" },
+        role: { "in": "body-prop", "name": "role", "required": false, "dataType": "string" },
+        phone: { "in": "body-prop", "name": "phone", "required": false, "dataType": "string" },
+      };
+
+      let validatedArgs: any[] = [];
+      try {
+        validatedArgs = getValidatedArgs(args, request);
+      } catch (err) {
+        return next(err);
+      }
+
+      const controller = new usersProfileController();
+
+
+      const promise = controller.create.apply(controller, validatedArgs as any);
+      promiseHandler(controller, promise, response, next);
+    });
+  app.put('/api/v1/profile/:id', [checkJwt],
+    function(request: any, response: any, next: any) {
+      const args = {
+        id: { "in": "path", "name": "id", "required": true, "dataType": "string" },
+        name: { "in": "body-prop", "name": "name", "required": true, "dataType": "string" },
+        lastname: { "in": "body-prop", "name": "lastname", "required": true, "dataType": "string" },
+        status: { "in": "body-prop", "name": "status", "required": true, "dataType": "double" },
+        role: { "in": "body-prop", "name": "role", "required": true, "dataType": "string" },
+        phone: { "in": "body-prop", "name": "phone", "required": true, "dataType": "string" },
+      };
+
+      let validatedArgs: any[] = [];
+      try {
+        validatedArgs = getValidatedArgs(args, request);
+      } catch (err) {
+        return next(err);
+      }
+
+      const controller = new usersProfileController();
+
+
+      const promise = controller.update.apply(controller, validatedArgs as any);
+      promiseHandler(controller, promise, response, next);
+    });
+  app.delete('/api/v1/profile/:id', [checkJwt],
+    function(request: any, response: any, next: any) {
+      const args = {
+        id: { "in": "path", "name": "id", "required": true, "dataType": "string" },
+      };
+
+      let validatedArgs: any[] = [];
+      try {
+        validatedArgs = getValidatedArgs(args, request);
+      } catch (err) {
+        return next(err);
+      }
+
+      const controller = new usersProfileController();
+
+
+      const promise = controller.remove.apply(controller, validatedArgs as any);
+      promiseHandler(controller, promise, response, next);
+    });
+  app.get('/api/v1/summoners', [checkJwt],
     function(request: any, response: any, next: any) {
       const args = {
       };
