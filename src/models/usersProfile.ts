@@ -6,6 +6,7 @@ const usersProfileSchema = new mongoose.Schema({
     lastname:  { type: String, required: false },
     phone:  { type: String, required: false },
     country:  { type: String, required: false },
+    about:  { type: String, required: false },
     deletedAt: { type: Date, required: false }
 });
 
@@ -14,6 +15,7 @@ export interface IUserProfile extends mongoose.Document {
     lastname?: string,
     phone?: string,
     country?: string,
+    about: string,
     deletedAt?: Date
 };
 
