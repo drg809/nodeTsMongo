@@ -15,7 +15,6 @@ export class usersController extends Controller {
             items = items.map((item) => { return {
                 id: item._id,
                 email: item.email,
-                name: item.name
               }
             });
             return items;
@@ -63,20 +62,14 @@ export class usersController extends Controller {
     public async create(@BodyProp('email') email: string,
      @BodyProp('password') password: string,
      @BodyProp('token') token: string,
-     @BodyProp('name') name: string,
-     @BodyProp('lastname') lastname: string,
      @BodyProp('status') status: number,
-     @BodyProp('role') role: string,
-     @BodyProp('phone') phone: string): Promise<any> {
+     @BodyProp('role') role: string): Promise<any> {
         const item = new usersModel({
           email: email,
           password: password,
           token: token,
-          name: name,
-          lastname: lastname,
           status: status,
           role: role,
-          phone: phone
         });
         item.password = bcrypt.hashSync(item.password, 10);
         await item.save();
@@ -87,17 +80,11 @@ export class usersController extends Controller {
 
     @Put('/users/{id}')
     public async update(id: string,
-      @BodyProp('name') name: string,
-      @BodyProp('lastname') lastname: string,
       @BodyProp('status') status: number,
-      @BodyProp('role') role: string,
-      @BodyProp('phone') phone: string ): Promise<void> {
+      @BodyProp('role') role: string): Promise<void> {
         await usersModel.findOneAndUpdate({_id: id, deletedAt: { $eq: null }}, { $set: {
-          name: name,
-          lastname: lastname,
           status: status,
           role: role,
-          phone: phone
         } } );
     }
 
