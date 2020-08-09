@@ -191,19 +191,17 @@ export function RegisterRoutes(app: express.Express) {
       const promise = controller.getOne.apply(controller, validatedArgs as any);
       promiseHandler(controller, promise, response, next);
     });
-  app.get('/api/v1/profile/user/:id', [checkJwt],
+  app.get('/api/v1/profile/user/:userId', [checkJwt],
     function(request: any, response: any, next: any) {
       const args = {
         id: { "in": "path", "name": "userId", "required": true, "dataType": "string" },
       };
-
       let validatedArgs: any[] = [];
       try {
         validatedArgs = getValidatedArgs(args, request);
       } catch (err) {
         return next(err);
       }
-
       const controller = new usersProfileController();
 
 
@@ -213,6 +211,7 @@ export function RegisterRoutes(app: express.Express) {
   app.post('/api/v1/profile', [checkJwt],
     function(request: any, response: any, next: any) {
       const args = {
+        userId: { "in": "body-prop", "name": "userId", "required": true, "dataType": "string" },
         name: { "in": "body-prop", "name": "name", "required": true, "dataType": "string" },
         lastname: { "in": "body-prop", "name": "lastname", "required": false, "dataType": "string" },
         phone: { "in": "body-prop", "name": "phone", "required": false, "dataType": "string" },
@@ -237,6 +236,7 @@ export function RegisterRoutes(app: express.Express) {
     function(request: any, response: any, next: any) {
       const args = {
         id: { "in": "path", "name": "id", "required": true, "dataType": "string" },
+        userId: { "in": "body-prop", "name": "userId", "required": true, "dataType": "string" },
         name: { "in": "body-prop", "name": "name", "required": true, "dataType": "string" },
         lastname: { "in": "body-prop", "name": "lastname", "required": false, "dataType": "string" },
         phone: { "in": "body-prop", "name": "phone", "required": false, "dataType": "string" },

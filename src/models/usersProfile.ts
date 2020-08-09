@@ -2,6 +2,7 @@ import * as mongoose from "mongoose";
 
 const usersProfileSchema = new mongoose.Schema({
     id: { type: mongoose.Schema.Types.ObjectId, required: false },
+    userId: { type: String, required: false },
     name:  { type: String, required: false },
     lastname:  { type: String, required: false },
     phone:  { type: String, required: false },
@@ -11,6 +12,7 @@ const usersProfileSchema = new mongoose.Schema({
 });
 
 export interface IUserProfile extends mongoose.Document {
+    userId?:  string,
     name?:  string,
     lastname?: string,
     phone?: string,

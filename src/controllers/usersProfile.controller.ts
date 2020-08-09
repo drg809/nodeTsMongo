@@ -30,7 +30,7 @@ export class usersProfileController extends Controller {
         }
     }
 
-    @Get('/profile/user/{id}')
+    @Get('/profile/user/{userId}')
     public async getByUserId(userId: string) : Promise<any[]> {
         try {
             let item: any = await usersProfileModel.findOne({userId: userId, deletedAt: { $eq: null }});
@@ -43,11 +43,13 @@ export class usersProfileController extends Controller {
 
     @Post('/profile')
     public async create(@BodyProp('name') name: string,
+     @BodyProp('userId') userId: string,
      @BodyProp('lastname') lastname: string,
      @BodyProp('phone') phone: string,
      @BodyProp('country') country: string,
      @BodyProp('about') about: string): Promise<any> {
         const item = new usersProfileModel({
+          userId: userId,
           name: name,
           lastname: lastname,
           phone: phone,
@@ -60,12 +62,14 @@ export class usersProfileController extends Controller {
 
     @Put('/profile/{id}')
     public async update(id: string,
+     @BodyProp('userId') userId: string,
      @BodyProp('name') name: string,
      @BodyProp('lastname') lastname: string,
      @BodyProp('phone') phone: string,
      @BodyProp('country') country: string,
      @BodyProp('about') about: string): Promise<void> {
         await usersProfileModel.findOneAndUpdate({_id: id, deletedAt: { $eq: null }}, { $set: {
+          userId: userId,
           name: name,
           lastname: lastname,
           phone: phone,
