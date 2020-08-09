@@ -42,8 +42,8 @@ export class usersProfileController extends Controller {
     }
 
     @Post('/profile')
-    public async create(@BodyProp('name') name: string,
-     @BodyProp('userId') userId: string,
+    public async create(@BodyProp('userId') userId: string,
+     @BodyProp('name') name: string,
      @BodyProp('lastname') lastname: string,
      @BodyProp('phone') phone: string,
      @BodyProp('country') country: string,
