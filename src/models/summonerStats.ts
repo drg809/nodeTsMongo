@@ -22,7 +22,7 @@ const summonerStatsSchema = new mongoose.Schema({
       wins:	{ type: Number, required: false }
     }],
     positions: {top1: Number,top2: Number,top3: Number,top4: Number,top5: Number,top6: Number,top7: Number,top8: Number, total: Number},
-    count: {}
+    count: {top4: {}, perGalaxie: {}, total: {}}
 });
 
 export interface ISummonerStats extends mongoose.Document {
@@ -46,7 +46,7 @@ export interface ISummonerStats extends mongoose.Document {
     wins:	number
   },
   positions?: {top1?: number,top2?: number,top3?: number,top4?: number,top5?: number,top6?: number,top7?: number,top8?: number,total?: number},
-  count?:any
+  count?: {top4: any, perGalaxie: any, total: any}
 };
 
 const summonersStatsModel = mongoose.model<ISummonerStats>('summonersStats', summonerStatsSchema);
