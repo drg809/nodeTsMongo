@@ -191,6 +191,25 @@ export function RegisterRoutes(app: express.Express) {
       const promise = controller.getOne.apply(controller, validatedArgs as any);
       promiseHandler(controller, promise, response, next);
     });
+  app.get('/api/v1/profile/user/:id', [checkJwt],
+    function(request: any, response: any, next: any) {
+      const args = {
+        id: { "in": "path", "name": "userId", "required": true, "dataType": "string" },
+      };
+
+      let validatedArgs: any[] = [];
+      try {
+        validatedArgs = getValidatedArgs(args, request);
+      } catch (err) {
+        return next(err);
+      }
+
+      const controller = new usersProfileController();
+
+
+      const promise = controller.getByUserId.apply(controller, validatedArgs as any);
+      promiseHandler(controller, promise, response, next);
+    });
   app.post('/api/v1/profile', [checkJwt],
     function(request: any, response: any, next: any) {
       const args = {
