@@ -30,6 +30,17 @@ export class usersProfileController extends Controller {
         }
     }
 
+    @Get('/profile/user/{id}')
+    public async getByUserId(userId: string) : Promise<any[]> {
+        try {
+            let item: any = await usersProfileModel.findOne({userId: userId, deletedAt: { $eq: null }});
+            return item;
+        } catch (err) {
+            this.setStatus(500);
+            console.error('Caught error', err);
+        }
+    }
+
     @Post('/profile')
     public async create(@BodyProp('name') name: string,
      @BodyProp('lastname') lastname: string,
