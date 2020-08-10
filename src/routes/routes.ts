@@ -313,12 +313,26 @@ export function RegisterRoutes(app: express.Express) {
       const promise = controller.getOne.apply(controller, validatedArgs as any);
       promiseHandler(controller, promise, response, next);
     });
-  app.post('/api/v1/summoners/match_history/:id', [checkJwt],
+  app.post('/api/v1/summoners/match_history_paginate/:id', [checkJwt],
     function(request: any, response: any, next: any) {
 
       const controller = new summonersController();
 
-      const promise = controller.getMatchHistory(request);
+      const promise = controller.getMatchHistoryPaginate(request);
+      promiseHandler(controller, promise, response, next);
+    });
+  app.post('/api/v1/summoners/match_history', [checkJwt, checkRol],
+    function(request: any, response: any, next: any) {
+      const args = {
+        userId: { "in": "path", "name": "userId", "required": true, "dataType": "string" },
+      };
+
+      let validatedArgs: any[] = [];
+
+      const controller = new summonersController();
+
+
+      const promise = controller.getMatchHistory.apply(controller, validatedArgs as any);
       promiseHandler(controller, promise, response, next);
     });
   app.post('/api/v1/summoners/leagueEntries_ext', [checkJwt, checkRol],
