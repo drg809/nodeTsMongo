@@ -208,8 +208,8 @@ export class summonersController extends Controller {
         });
     }
 
-    @Post('/summoners/match_history/{id}')
-    public async getMatchHistory(req: any) : Promise<any> {
+    @Post('/summoners/match_history_paginate/{id}')
+    public async getMatchHistoryPaginate(req: any) : Promise<any> {
         const resPerPage = 10;
         const page = req.body.page || 1;
         try {
@@ -220,6 +220,17 @@ export class summonersController extends Controller {
             let numOfProducts = await summonersMatchesModel.count({userId: req.params.id, 'data.info.queue_id': {$eq: 1100}})
             const res = {data: item, pageIndex: page, pageSize: resPerPage, pages: Math.ceil(numOfProducts / resPerPage), numResult: numOfProducts};
             return res;
+        } catch (err) {
+            this.setStatus(500);
+            console.error('Caught error', err);
+        }
+    }
+
+    @Post('/summoners/match_history/{userId}')
+    public async getMatchHistory(@BodyProp('userId') userId: string) : Promise<any> {
+        try {
+            let item: ISummonerMatches[] = await summonersMatchesModel.find({userId: userId, 'data.info.queue_id': {$eq: 1100}});
+            return item;
         } catch (err) {
             this.setStatus(500);
             console.error('Caught error', err);
