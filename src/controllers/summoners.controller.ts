@@ -226,7 +226,7 @@ export class summonersController extends Controller {
         }
     }
 
-    @Post('/summoners/match_history/{userId}')
+    @Get('/summoners/match_history/{userId}')
     public async getMatchHistory(@BodyProp('userId') userId: string) : Promise<any> {
         try {
             let item: ISummonerMatches[] = await summonersMatchesModel.find({userId: userId, 'data.info.queue_id': {$eq: 1100}});
