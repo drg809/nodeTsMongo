@@ -321,16 +321,18 @@ export function RegisterRoutes(app: express.Express) {
       const promise = controller.getMatchHistoryPaginate(request);
       promiseHandler(controller, promise, response, next);
     });
-  app.get('/api/v1/summoners/match_history', [checkJwt, checkRol],
+  app.get('/api/v1/summoners/match_history/:userId', [checkJwt, checkRol],
     function(request: any, response: any, next: any) {
       const args = {
         userId: { "in": "path", "name": "userId", "required": true, "dataType": "string" },
       };
-
       let validatedArgs: any[] = [];
-
+      try {
+        validatedArgs = getValidatedArgs(args, request);
+      } catch (err) {
+        return next(err);
+      }
       const controller = new summonersController();
-
 
       const promise = controller.getMatchHistory.apply(controller, validatedArgs as any);
       promiseHandler(controller, promise, response, next);
