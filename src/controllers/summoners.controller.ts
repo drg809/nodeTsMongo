@@ -229,7 +229,7 @@ export class summonersController extends Controller {
     @Get('/summoners/match_history/{userId}')
     public async getMatchHistory(@BodyProp('userId') userId: string) : Promise<any> {
         try {
-            let item: ISummonerMatches[] = await summonersMatchesModel.find({userId: userId, 'data.info.queue_id': {$eq: 1100}});
+            let item: ISummonerMatches[] = await summonersMatchesModel.find({userId: userId, 'data.info.queue_id': {$eq: 1100}}).sort({'data.info.game_datetime': -1});
             return item;
         } catch (err) {
             this.setStatus(500);
