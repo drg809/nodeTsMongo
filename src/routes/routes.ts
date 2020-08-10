@@ -321,7 +321,7 @@ export function RegisterRoutes(app: express.Express) {
       const promise = controller.getMatchHistoryPaginate(request);
       promiseHandler(controller, promise, response, next);
     });
-  app.post('/api/v1/summoners/match_history', [checkJwt, checkRol],
+  app.get('/api/v1/summoners/match_history', [checkJwt, checkRol],
     function(request: any, response: any, next: any) {
       const args = {
         userId: { "in": "path", "name": "userId", "required": true, "dataType": "string" },
