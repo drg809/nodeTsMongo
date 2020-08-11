@@ -139,7 +139,7 @@ export class summonersController extends Controller {
     @Post('/summoners/stats')
     public async getSummonerStats(req: Request) {
         let top1: number = 0; let top2: number = 0; let top3: number = 0; let top4: number = 0; let top5: number = 0; let top6: number = 0; let top7: number = 0; let top8: number = 0;
-        let countsTop4 = {};let counts = {};let winRateGalaxie = {top1:{},top2:{},top3:{},top4:{},top5:{},top6:{},top7:{},top8:{},top:[]};let w = [];
+        let countsTop4 = {};let counts = {};let winRateGalaxie = {top1:{},top2:{},top3:{},top4:{},top5:{},top6:{},top7:{},top8:{},top:[]};let w = [];let unitsArray = [];let champCount = {};
         const auth = usersController.getTokenPayload(req);
         let sum: ISummoner = await summonersModel.findOne({userId: auth.id, main: true});
         let stats: ISummonerStats = await summonersStatsModel.findOne({summonerName:{ $regex : new RegExp(sum.summonerName, "i") }});
@@ -186,7 +186,11 @@ export class summonersController extends Controller {
 
           if(x.data.placement < 5) {
             countsTop4[x.data.game_variation] = (countsTop4[x.data.game_variation] || 0)+1;
+            for (const u of x.data.units) {
+              unitsArray.push(u);
+            }
           }
+
           counts[x.data.game_variation] = (counts[x.data.game_variation] || 0)+1;
         };
         // winRateGalaxie.top.forEach(x => {
@@ -196,7 +200,16 @@ export class summonersController extends Controller {
           w.push({key: key, value: winRateGalaxie.top[key]});
         }
         winRateGalaxie.top = w;
-        stats.count = {top4: countsTop4, perGalaxie: winRateGalaxie, total: counts};
+        for (const z of unitsArray) {
+          champCount[z.character_id] = (champCount[z.character_id] || 0)+1;
+        }
+        unitsArray = [];
+        for (const key of Object.keys(champCount)) {
+          const value = champCount[key];
+          unitsArray.push({x: key, y: value});
+        }
+        unitsArray.sort((a, b) => b.y - a.y).splice(20, unitsArray.length - 10);
+        stats.count = {top4: countsTop4, perGalaxie: winRateGalaxie, total: counts, champs: unitsArray};
         return stats;
     }
 
