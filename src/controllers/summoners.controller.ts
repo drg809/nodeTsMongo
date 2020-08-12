@@ -222,8 +222,8 @@ export class summonersController extends Controller {
         for (const y of unitsArrayTotal) {
           champCountTotal[y.character_id] = (champCountTotal[y.character_id] || 0)+1;
         }
-        unitsArrayTop1.sort((a, b) => b.y - a.y).splice(20, unitsArrayTop1.length - 10);
-        unitsArray.sort((a, b) => b.y - a.y).splice(20, unitsArray.length - 10);
+        unitsArrayTop1.sort((a, b) => b.y - a.y).splice(15, unitsArrayTop1.length - 15);
+        unitsArray.sort((a, b) => b.y - a.y).splice(15, unitsArray.length - 15);
 
         stats.count = {top4: countsTop4, perGalaxie: winRateGalaxie, total: counts, champs: { top1: unitsArrayTop1, top4: unitsArray, top4C: champCount, totalC: champCountTotal }};
         return stats;
