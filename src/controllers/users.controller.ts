@@ -51,7 +51,7 @@ export class usersController extends Controller {
             //this.updateToken(user._id,token);
             let sum = await summonersModel.findOne({userId: user._id, main: true});
             user.puuid = sum.puuid;
-            user.main = sum.id;
+            user.main = sum._id;
             return user;
         } else {
             this.setStatus(500);
