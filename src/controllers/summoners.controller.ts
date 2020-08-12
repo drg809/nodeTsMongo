@@ -138,8 +138,9 @@ export class summonersController extends Controller {
 
     @Post('/summoners/stats')
     public async getSummonerStats(req: Request) {
-        let top1: number = 0; let top2: number = 0; let top3: number = 0; let top4: number = 0; let top5: number = 0; let top6: number = 0; let top7: number = 0; let top8: number = 0;let champCountTop1 = {};let champCountTotal = {};
-        let countsTop4 = {};let counts = {};let winRateGalaxie = {top1:{},top2:{},top3:{},top4:{},top5:{},top6:{},top7:{},top8:{},top:[]};let w = [];let unitsArray = [];let champCount = {};let unitsArrayTop1 = [];let unitsArrayTotal = [];
+        let top1: number = 0; let top2: number = 0; let top3: number = 0; let top4: number = 0; let top5: number = 0; let top6: number = 0; let top7: number = 0; let top8: number = 0;let countsT1 = {};
+        let champCountTop1 = {};let champCountTotal = {};let champCount = {};let unitsArrayTop1 = [];let unitsArrayTotal = [];let traitsArrayTotal = [];let traitsArrayT4 = [];let countsTotal = {};
+        let countsTop4 = {};let counts = {};let winRateGalaxie = {top1:{},top2:{},top3:{},top4:{},top5:{},top6:{},top7:{},top8:{},top:[]};let w = [];let unitsArray = [];let traitsArrayT1 = [];let countsT4 = {};
         const auth = usersController.getTokenPayload(req);
         let sum: ISummoner = await summonersModel.findOne({userId: auth.id, main: true});
         let stats: ISummonerStats = await summonersStatsModel.findOne({summonerName:{ $regex : new RegExp(sum.summonerName, "i") }});
@@ -153,6 +154,11 @@ export class summonersController extends Controller {
               winRateGalaxie.top[x.data.game_variation] = (winRateGalaxie.top[x.data.game_variation] || 0)+1;
               for (const u of x.data.units) {
                 unitsArrayTop1.push(u);
+              }
+              for (const u of x.data.traits) {
+                if (u.style > 1) {
+                  traitsArrayT1.push(u);
+                }
               }
               break;
             case 2:
@@ -192,9 +198,19 @@ export class summonersController extends Controller {
             for (const t of x.data.units) {
               unitsArray.push(t);
             }
+            for (const s of x.data.traits) {
+              if (s.style > 1) {
+                traitsArrayT4.push(s);
+              }
+            }
           }
           for (const s of x.data.units) {
             unitsArrayTotal.push(s);
+          }
+          for (const s of x.data.traits) {
+            if (s.style > 1) {
+              traitsArrayTotal.push(s);
+            }
           }
 
           counts[x.data.game_variation] = (counts[x.data.game_variation] || 0)+1;
@@ -225,7 +241,29 @@ export class summonersController extends Controller {
         unitsArrayTop1.sort((a, b) => b.y - a.y).splice(15, unitsArrayTop1.length - 15);
         unitsArray.sort((a, b) => b.y - a.y).splice(15, unitsArray.length - 15);
 
-        stats.count = {top4: countsTop4, perGalaxie: winRateGalaxie, total: counts, champs: { top1: unitsArrayTop1, top4: unitsArray, top4C: champCount, totalC: champCountTotal }};
+        for (const z of traitsArrayT1) {
+          countsT1[z.name] = (countsT1[z.name] || 0)+1;
+        }
+        traitsArrayT1 = [];
+        for (const key of Object.keys(countsT1)) {
+          const value = countsT1[key];
+          traitsArrayT1.push({x: key, y: value});
+        }
+        for (const z of traitsArrayT4) {
+          countsT4[z.name] = (countsT4[z.name] || 0)+1;
+        }
+        traitsArrayT4 = [];
+        for (const key of Object.keys(countsT4)) {
+          const value = countsT4[key];
+          traitsArrayT4.push({x: key, y: value});
+        }
+        for (const y of traitsArrayTotal) {
+          countsTotal[y.name] = (countsTotal[y.name] || 0)+1;
+        }
+        traitsArrayT1.sort((a, b) => b.y - a.y).splice(10, traitsArrayT1.length - 10);
+        traitsArrayT4.sort((a, b) => b.y - a.y).splice(10, traitsArrayT4.length - 10);
+
+        stats.count = {top4: countsTop4, perGalaxie: winRateGalaxie, total: counts, champs: { top1: unitsArrayTop1, top4: unitsArray, top4C: champCount, totalC: champCountTotal }, traits: { top1: traitsArrayT1, top4: traitsArrayT4, top4C: countsT4, totalC: countsTotal }};
         return stats;
     }
 
