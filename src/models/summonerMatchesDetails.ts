@@ -19,7 +19,13 @@ const summonersMatchesDetailsSchema = new mongoose.Schema({
         puuid: String,
         time_eliminated: Number,
         total_damage_to_players: Number,
-        traits: Object,
+        traits: [{
+          name: String,
+          num_units: Number,
+          style: Number,
+          tier_current: Number,
+          tier_total: Number,
+        }],
         units: [{
           character_id: String,
           items: [Number],
@@ -53,7 +59,13 @@ export interface ISummonerMatchesDetails extends mongoose.Document {
       puuid: string,
       time_eliminated: number,
       total_damage_to_players: number,
-      traits: object,
+      traits: [{
+        name: string,
+        num_units: number,
+        style: number,
+        tier_current: number,
+        tier_total: number,
+      }],
       units: [{
         character_id: string,
         items: [number],
