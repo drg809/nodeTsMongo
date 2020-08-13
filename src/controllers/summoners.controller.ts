@@ -245,8 +245,8 @@ export class summonersController extends Controller {
         for (const y of unitsArrayTotal) {
           champCountTotal[y.character_id] = (champCountTotal[y.character_id] || 0)+1;
         }
-        unitsArrayTop1.sort((a, b) => b.y - a.y).splice(15, unitsArrayTop1.length - 15);
-        unitsArray.sort((a, b) => b.y - a.y).splice(15, unitsArray.length - 15);
+        unitsArrayTop1.sort((a, b) => b.y - a.y).splice(10, unitsArrayTop1.length - 10);
+        unitsArray.sort((a, b) => b.y - a.y).splice(10, unitsArray.length - 10);
 
         for (const z of traitsArrayT1) {
           countsT1[z.name] = (countsT1[z.name] || 0)+1;
