@@ -883,7 +883,7 @@ export function RegisterRoutes(app: express.Express) {
   app.get('/api/v1/match_notes/:entrieId', [checkJwt],
     function(request: any, response: any, next: any) {
       const args = {
-        userId: { "in": "path", "name": "userId", "required": true, "dataType": "string" },
+        entrieId: { "in": "path", "name": "entrieId", "required": true, "dataType": "string" },
       };
 
       let validatedArgs: any[] = [];
