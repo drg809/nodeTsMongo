@@ -10,6 +10,7 @@ import './controllers/summoners.controller';
 import './controllers/database.controller';
 import './controllers/retries.controller';
 import './controllers/usersProfile.controller';
+import './controllers/matchNotes.controller';
 
 import { RegisterRoutes } from './routes/routes';
 
