@@ -9,6 +9,7 @@ import { checkJwt } from '../middleware/jwtchecker.middleware';
 import { summonersController } from '../controllers/summoners.controller';
 import { checkRol } from '../middleware/checkrol.middleware';
 import { usersProfileController } from '../controllers/usersProfile.controller';
+import { matchNotesController } from '../controllers/matchNotes.controller';
 
 const models: TsoaRoute.Models = {
 };
@@ -879,6 +880,86 @@ export function RegisterRoutes(app: express.Express) {
       promiseHandler(controller, promise, response, next);
     });
 
+  app.get('/api/v1/match_notes/:entrieId', [checkJwt],
+    function(request: any, response: any, next: any) {
+      const args = {
+        userId: { "in": "path", "name": "userId", "required": true, "dataType": "string" },
+      };
+
+      let validatedArgs: any[] = [];
+      try {
+        validatedArgs = getValidatedArgs(args, request);
+      } catch (err) {
+        return next(err);
+      }
+      const controller = new matchNotesController();
+
+
+      const promise = controller.getAll.apply(controller, validatedArgs as any);
+      promiseHandler(controller, promise, response, next);
+    });
+  app.post('/api/v1/match_notes', [checkJwt],
+    function(request: any, response: any, next: any) {
+      const args = {
+        userId: { "in": "body-prop", "name": "userId", "required": true, "dataType": "string" },
+        entrieId: { "in": "body-prop", "name": "entrieId", "required": true, "dataType": "string" },
+        text: { "in": "body-prop", "name": "text", "required": true, "dataType": "string" }
+      };
+
+      let validatedArgs: any[] = [];
+      try {
+        validatedArgs = getValidatedArgs(args, request);
+      } catch (err) {
+        return next(err);
+      }
+
+      const controller = new matchNotesController();
+
+
+      const promise = controller.create.apply(controller, validatedArgs as any);
+      promiseHandler(controller, promise, response, next);
+    });
+  app.put('/api/v1/match_notes/:id', [checkJwt],
+    function(request: any, response: any, next: any) {
+      const args = {
+        id: { "in": "path", "name": "id", "required": true, "dataType": "string" },
+        userId: { "in": "body-prop", "name": "userId", "required": true, "dataType": "string" },
+        entrieId: { "in": "body-prop", "name": "entrieId", "required": true, "dataType": "string" },
+        text: { "in": "body-prop", "name": "text", "required": true, "dataType": "string" }
+      };
+
+      let validatedArgs: any[] = [];
+      try {
+        validatedArgs = getValidatedArgs(args, request);
+      } catch (err) {
+        return next(err);
+      }
+
+      const controller = new matchNotesController();
+
+
+      const promise = controller.update.apply(controller, validatedArgs as any);
+      promiseHandler(controller, promise, response, next);
+    });
+  app.delete('/api/v1/match_notes/:id', [checkJwt],
+    function(request: any, response: any, next: any) {
+      const args = {
+        id: { "in": "path", "name": "id", "required": true, "dataType": "string" },
+      };
+
+      let validatedArgs: any[] = [];
+      try {
+        validatedArgs = getValidatedArgs(args, request);
+      } catch (err) {
+        return next(err);
+      }
+
+      const controller = new matchNotesController();
+
+
+      const promise = controller.remove.apply(controller, validatedArgs as any);
+      promiseHandler(controller, promise, response, next);
+    });
 
   function isController(object: any): object is Controller {
     return 'getHeaders' in object && 'getStatus' in object && 'setStatus' in object;
