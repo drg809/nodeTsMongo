@@ -799,7 +799,7 @@ export function RegisterRoutes(app: express.Express) {
   app.get('/api/v1/summonerStats', [checkJwt],
     function(request: any, response: any, next: any) {
       const args = {
-        userId: { "in": "path", "name": "userId", "required": true, "dataType": "string" }
+        summonerId: { "in": "path", "name": "summonerId", "required": true, "dataType": "string" }
       };
 
       let validatedArgs: any[] = [];
