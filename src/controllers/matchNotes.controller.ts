@@ -4,9 +4,9 @@ import { matchNotesModel } from '../models/matchNotes';
 @Route('/')
 export class matchNotesController extends Controller {
     @Get('/match_notes/{entrieId}')
-    public async getAll(entrieId: string) : Promise<any[]> {
+    public async getAll(@BodyProp('entrieId') entrieId: string) : Promise<any[]> {
         try {
-            let items: any[] = await matchNotesModel.find({entrieId: entrieId, deletedAt: { $eq: null }});
+            let items: any[] = await matchNotesModel.find({entrieId: entrieId, visible: true, deletedAt: { $eq: null }});
             items = items.map((item) => { return {
                 id: item._id,
                 userId: item.userId,
@@ -21,6 +21,24 @@ export class matchNotesController extends Controller {
             console.error('Caught error', err);
         }
     }
+    @Get('/match_notesh/{entrieId}/{userId}')
+    public async getHiddenNotes(@BodyProp('entrieId') entrieId: string,@BodyProp('userId') userId: string) : Promise<any[]> {
+      try {
+          let items: any[] = await matchNotesModel.find({entrieId: entrieId, userId: userId, visible: false, deletedAt: { $eq: null }});
+          items = items.map((item) => { return {
+              id: item._id,
+              userId: item.userId,
+              entrieId: item.entrieId,
+              text: item.text,
+              visible: item.visible
+            }
+          });
+          return items;
+      } catch (err) {
+          this.setStatus(500);
+          console.error('Caught error', err);
+      }
+  }
 
     @Post('/match_notes')
     public async create(@BodyProp('userId') userId: string,
