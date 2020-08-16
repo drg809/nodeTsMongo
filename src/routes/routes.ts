@@ -233,6 +233,26 @@ export function RegisterRoutes(app: express.Express) {
       const promise = controller.create.apply(controller, validatedArgs as any);
       promiseHandler(controller, promise, response, next);
     });
+  app.post('/api/v1/profile/image', [checkJwt],
+    function(request: any, response: any, next: any) {
+      const args = {
+        userId: { "in": "body-prop", "name": "userId", "unique": true, "required": true, "dataType": "string" },
+        data: { "in": "body-prop", "name": "data", "required": true, "dataType": "string" }
+      };
+
+      let validatedArgs: any[] = [];
+      try {
+        validatedArgs = getValidatedArgs(args, request);
+      } catch (err) {
+        return next(err);
+      }
+
+      const controller = new usersProfileController();
+
+
+      const promise = controller.uploadImage.apply(controller, validatedArgs as any);
+      promiseHandler(controller, promise, response, next);
+    });
   app.put('/api/v1/profile/:id', [checkJwt],
     function(request: any, response: any, next: any) {
       const args = {
@@ -779,6 +799,7 @@ export function RegisterRoutes(app: express.Express) {
   app.get('/api/v1/summonerStats', [checkJwt],
     function(request: any, response: any, next: any) {
       const args = {
+        userId: { "in": "path", "name": "userId", "required": true, "dataType": "string" }
       };
 
       let validatedArgs: any[] = [];
