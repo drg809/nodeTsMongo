@@ -903,7 +903,8 @@ export function RegisterRoutes(app: express.Express) {
       const args = {
         userId: { "in": "body-prop", "name": "userId", "required": true, "dataType": "string" },
         entrieId: { "in": "body-prop", "name": "entrieId", "required": true, "dataType": "string" },
-        text: { "in": "body-prop", "name": "text", "required": true, "dataType": "string" }
+        text: { "in": "body-prop", "name": "text", "required": true, "dataType": "string" },
+        visible: { "in": "body-prop", "name": "visible", "required": true, "dataType": "boolean" }
       };
 
       let validatedArgs: any[] = [];
@@ -925,7 +926,8 @@ export function RegisterRoutes(app: express.Express) {
         id: { "in": "path", "name": "id", "required": true, "dataType": "string" },
         userId: { "in": "body-prop", "name": "userId", "required": true, "dataType": "string" },
         entrieId: { "in": "body-prop", "name": "entrieId", "required": true, "dataType": "string" },
-        text: { "in": "body-prop", "name": "text", "required": true, "dataType": "string" }
+        text: { "in": "body-prop", "name": "text", "required": true, "dataType": "string" },
+        visible: { "in": "body-prop", "name": "visible", "required": true, "dataType": "boolean" }
       };
 
       let validatedArgs: any[] = [];
