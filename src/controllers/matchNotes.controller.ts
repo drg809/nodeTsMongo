@@ -11,7 +11,8 @@ export class matchNotesController extends Controller {
                 id: item._id,
                 userId: item.userId,
                 entrieId: item.entrieId,
-                text: item.text
+                text: item.text,
+                visible: item.visible
               }
             });
             return items;
@@ -24,11 +25,13 @@ export class matchNotesController extends Controller {
     @Post('/match_notes')
     public async create(@BodyProp('userId') userId: string,
      @BodyProp('entrieId') entrieId: string,
-     @BodyProp('text') text: string): Promise<any> {
+     @BodyProp('text') text: string,
+     @BodyProp('visible') visible: boolean): Promise<any> {
         const item = new matchNotesModel({
           userId: userId,
           entrieId: entrieId,
-          text: text
+          text: text,
+          visible: visible
         });
         await item.save();
         return item;
@@ -38,11 +41,13 @@ export class matchNotesController extends Controller {
     public async update(id: string,
       @BodyProp('userId') userId: string,
       @BodyProp('entrieId') entrieId: string,
-      @BodyProp('text') text: string): Promise<void> {
+      @BodyProp('text') text: string,
+      @BodyProp('visible') visible: boolean): Promise<void> {
         await matchNotesModel.findOneAndUpdate({_id: id, deletedAt: { $eq: null }}, { $set: {
           userId: userId,
           entrieId: entrieId,
-          text: text
+          text: text,
+          visible: visible
         } } );
     }
 
