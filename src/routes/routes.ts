@@ -898,6 +898,25 @@ export function RegisterRoutes(app: express.Express) {
       const promise = controller.getAll.apply(controller, validatedArgs as any);
       promiseHandler(controller, promise, response, next);
     });
+  app.get('/api/v1/match_notesh/:entrieId/:userId', [checkJwt],
+    function(request: any, response: any, next: any) {
+      const args = {
+        entrieId: { "in": "path", "name": "entrieId", "required": true, "dataType": "string" },
+        userId: { "in": "path", "name": "userId", "required": true, "dataType": "string" }
+      };
+
+      let validatedArgs: any[] = [];
+      try {
+        validatedArgs = getValidatedArgs(args, request);
+      } catch (err) {
+        return next(err);
+      }
+      const controller = new matchNotesController();
+
+
+      const promise = controller.getHiddenNotes.apply(controller, validatedArgs as any);
+      promiseHandler(controller, promise, response, next);
+    });
   app.post('/api/v1/match_notes', [checkJwt],
     function(request: any, response: any, next: any) {
       const args = {
