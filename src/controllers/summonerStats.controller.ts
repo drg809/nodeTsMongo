@@ -23,10 +23,10 @@ export class summonerStatsController extends Controller {
         }
     }
 
-    @Get('/summonerStats/{id}')
-    public async getOne(id: string) : Promise<any[]> {
+    @Get('/summonerStats/{userId}')
+    public async getOne(@BodyProp('userId') userId: string) : Promise<any[]> {
         try {
-            let item: any = await summonersStatsModel.findOne({_id: id});
+            let item: any = await summonersStatsModel.findOne({userId: userId});
             return item;
         } catch (err) {
             this.setStatus(500);
