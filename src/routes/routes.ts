@@ -799,7 +799,6 @@ export function RegisterRoutes(app: express.Express) {
   app.get('/api/v1/summonerStats', [checkJwt],
     function(request: any, response: any, next: any) {
       const args = {
-        summonerId: { "in": "path", "name": "summonerId", "required": true, "dataType": "string" }
       };
 
       let validatedArgs: any[] = [];
@@ -815,10 +814,10 @@ export function RegisterRoutes(app: express.Express) {
       const promise = controller.getAll.apply(controller, validatedArgs as any);
       promiseHandler(controller, promise, response, next);
     });
-  app.get('/api/v1/summonerStats/:id', [checkJwt],
+  app.get('/api/v1/summonerStats/:summonerId', [checkJwt],
     function(request: any, response: any, next: any) {
       const args = {
-        id: { "in": "path", "name": "id", "required": true, "dataType": "string" },
+        summonerId: { "in": "path", "name": "summonerId", "required": true, "dataType": "string" }
       };
 
       let validatedArgs: any[] = [];

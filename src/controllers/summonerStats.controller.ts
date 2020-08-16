@@ -1,5 +1,6 @@
 import { Route, Get, Controller, Post, BodyProp, Put, Delete, SuccessResponse } from 'tsoa';
 import { summonersStatsModel, ISummonerStats} from '../models/summonerStats';
+import { summonersModel, ISummoner } from '../models/summoners';
 
 @Route('/')
 export class summonerStatsController extends Controller {
@@ -24,9 +25,10 @@ export class summonerStatsController extends Controller {
     }
 
     @Get('/summonerStats/{summonerId}')
-    public async getOne(@BodyProp('summonerId') summonerId: string) : Promise<any[]> {
+    public async getOne(@BodyProp('summonerId') summonerId: string) : Promise<any> {
         try {
-            let item: any = await summonersStatsModel.findOne({summonerId: summonerId});
+            let sum: ISummoner = await summonersModel.findOne({_id: summonerId})
+            let item: ISummonerStats = await summonersStatsModel.findOne({summonerName: { $regex : new RegExp(sum.summonerName, "i") }});
             return item;
         } catch (err) {
             this.setStatus(500);
