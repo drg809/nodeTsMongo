@@ -41,7 +41,6 @@ export class summonersController extends Controller {
     public async getOne(id: string) : Promise<any> {
         try {
             let item: any = await summonersModel.findOne({userId: id, deletedAt: { $eq: null }});
-            console.log(id);
             return item;
         } catch (err) {
             this.setStatus(500);
@@ -145,7 +144,6 @@ export class summonersController extends Controller {
             const auth = usersController.getTokenPayload(req);
             let sum: ISummoner = await summonersModel.findOne({userId: auth.id, main: true});
             let stats: ISummonerStats = await summonersStatsModel.findOne({summonerName:{ $regex : new RegExp(sum.summonerName, "i") }});
-            console.log(stats);
             let matches: ISummonerMatchesDetails[] = await summonersMatchesDetailsModel.find({sumId: sum._id, userId: auth.id});
             stats.positions = {top1: top1,top2: top2,top3: top3,top4: top4,top5: top5,top6: top6,top7: top7,top8: top8, total: matches.length + 1};
             for (const x of matches) {
