@@ -145,7 +145,8 @@ export class summonersController extends Controller {
             const auth = usersController.getTokenPayload(req);
             let sum: ISummoner = await summonersModel.findOne({userId: auth.id, main: true});
             let stats: ISummonerStats = await summonersStatsModel.findOne({summonerName:{ $regex : new RegExp(sum.summonerName, "i") }});
-            let matches: ISummonerMatchesDetails[] = await summonersMatchesDetailsModel.find({userId: auth.id});
+            console.log(stats);
+            let matches: ISummonerMatchesDetails[] = await summonersMatchesDetailsModel.find({sumId: sum._id, userId: auth.id});
             stats.positions = {top1: top1,top2: top2,top3: top3,top4: top4,top5: top5,top6: top6,top7: top7,top8: top8, total: matches.length + 1};
             for (const x of matches) {
               switch(x.data.placement){
@@ -301,11 +302,11 @@ export class summonersController extends Controller {
         const resPerPage = 10;
         const page = req.body.page || 1;
         try {
-            let item: ISummonerMatches[] = await summonersMatchesModel.find({userId: req.params.id, 'data.info.queue_id': {$eq: 1100}})
+            let item: ISummonerMatches[] = await summonersMatchesModel.find({sumId: req.body.sumId, userId: req.params.id, 'data.info.queue_id': {$eq: 1100}})
             .sort({'data.info.game_datetime': -1})
             .skip((resPerPage * page) - resPerPage)
             .limit(resPerPage);
-            let numOfProducts = await summonersMatchesModel.count({userId: req.params.id, 'data.info.queue_id': {$eq: 1100}})
+            let numOfProducts = await summonersMatchesModel.count({sumId: req.body.sumId, userId: req.params.id, 'data.info.queue_id': {$eq: 1100}})
             const res = {data: item, pageIndex: page, pageSize: resPerPage, pages: Math.ceil(numOfProducts / resPerPage), numResult: numOfProducts};
             return res;
         } catch (err) {
@@ -315,9 +316,9 @@ export class summonersController extends Controller {
     }
 
     @Get('/summoners/match_history/{userId}')
-    public async getMatchHistory(@BodyProp('userId') userId: string) : Promise<any> {
+    public async getMatchHistory(@BodyProp('sumId') sumId: string, @BodyProp('userId') userId: string) : Promise<any> {
         try {
-            let item: ISummonerMatches[] = await summonersMatchesModel.find({userId: userId, 'data.info.queue_id': {$eq: 1100}}).sort({'data.info.game_datetime': -1});
+            let item: ISummonerMatches[] = await summonersMatchesModel.find({sumId: sumId, userId: userId, 'data.info.queue_id': {$eq: 1100}}).sort({'data.info.game_datetime': -1});
             return item;
         } catch (err) {
             this.setStatus(500);
@@ -335,6 +336,7 @@ export class summonersController extends Controller {
                 summonerName: item.summonerName,
                 rank: item.rank,
                 region: item.region,
+                puuid: item.puuid,
                 summonerLevel: item.summonerLevel,
                 profileIconId: item.profileIconId,
                 main: item.main
@@ -377,8 +379,8 @@ export class summonersController extends Controller {
     }
 
     @Post('/summoners/get_matches_ext')
-    public async getMatchesExt(@BodyProp('userId') userId: string ): Promise<any> {
-        let sum: ISummoner = await summonersModel.findOne({userId: userId, deletedAt: { $eq: null }});
+    public async getMatchesExt(@BodyProp('userId') userId: string, @BodyProp('id') id: string ): Promise<any> {
+        let sum: ISummoner = await summonersModel.findOne({_id: id, userId: userId, deletedAt: { $eq: null }});
         let data: any[];
         try {
           api.get('europe', 'tftMatch.getMatchIdsByPUUID', sum.puuid ).then(res => {
@@ -388,7 +390,7 @@ export class summonersController extends Controller {
               if(!match) {
                 let sumE = new summonersEntriesModel({
                   userId: sum.userId,
-                  sumId: sum.id,
+                  sumId: sum._id,
                   entrie: value
                 });
                 sumE.save();
@@ -404,15 +406,15 @@ export class summonersController extends Controller {
     }
 
     @Post('/summoners/match_info_ext')
-    public async setLastMatchInfoExt(@BodyProp('userId') userId: string, @BodyProp('sumId') sumId: string ) {
-        this.getMatchesExt(userId);
-        let sum: ISummonerEntries[] = await summonersEntriesModel.find({userId: userId, sumId: sumId});
+    public async setLastMatchInfoExt(@BodyProp('userId') userId: string, @BodyProp('id') id: string ) {
+        await this.getMatchesExt(userId, id);
+        let sum: ISummonerEntries[] = await summonersEntriesModel.find({userId: userId, sumId: id});
         let data: any[];
         try {
           sum.forEach(ent => {
             setTimeout(async function () {
               let match: ISummonerMatches = await summonersMatchesModel.findOne({entrie: ent.entrie});
-              if (!match) {
+              //if (!match) {
                 api.get('europe', 'tftMatch.getMatch', ent.entrie ).then(res => {
                   data = res;
                   let sumE = new summonersMatchesModel({
@@ -443,10 +445,11 @@ export class summonersController extends Controller {
 
                       });
                     }
-                    let s: ISummoner = await summonersModel.findOne({userId: userId, deletedAt: { $eq: null }});
+                    let s: ISummoner = await summonersModel.findOne({_id: id, userId: userId, deletedAt: { $eq: null }});
                     if (x.puuid == s.puuid) {
                       let details = new summonersMatchesDetailsModel({
                         userId: ent.userId,
+                        sumId: ent.sumId,
                         entrie: ent.entrie,
                         data: {
                           match_id: sumE.data.metadata.match_id,
@@ -474,11 +477,11 @@ export class summonersController extends Controller {
                   });
                 });
 
-              }
+              //}
             }, 100);
 
           });
-          return data;
+          return sum;
 
         } catch (err) {
           console.log('Error:' + err);
