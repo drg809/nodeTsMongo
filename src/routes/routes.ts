@@ -473,7 +473,8 @@ export function RegisterRoutes(app: express.Express) {
   app.post('/api/v1/summoners/get_matches_ext', [checkJwt],
     function(request: any, response: any, next: any) {
       const args = {
-        userId: { "in": "body-prop", "name": "userId", "required": true, "dataType": "string" }
+        userId: { "in": "body-prop", "name": "userId", "required": true, "dataType": "string" },
+        id: { "in": "body-prop", "name": "id", "required": true, "dataType": "string" }
       };
       let validatedArgs: any[] = [];
       try {
@@ -490,7 +491,8 @@ export function RegisterRoutes(app: express.Express) {
   app.post('/api/v1/summoners/match_info_ext', [checkJwt],
     function(request: any, response: any, next: any) {
       const args = {
-        userId: { "in": "body-prop", "name": "userId", "required": true, "dataType": "string" }
+        userId: { "in": "body-prop", "name": "userId", "required": true, "dataType": "string" },
+        id: { "in": "body-prop", "name": "id", "required": true, "dataType": "string" }
       };
       let validatedArgs: any[] = [];
       try {
