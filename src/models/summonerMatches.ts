@@ -13,6 +13,7 @@ const ParticipantsSchema = new mongoose.Schema({
 const summonersMatchesSchema = new mongoose.Schema({
     id: { type: mongoose.Schema.Types.ObjectId, required: false },
     userId: { type: mongoose.Schema.Types.ObjectId, required: true },
+    sumId: { type: mongoose.Schema.Types.ObjectId, required: true },
     entrie: { type: String, unique : true, required : true, dropDups: true },
     data:  {
       metadata: {
@@ -47,6 +48,7 @@ const summonersMatchesSchema = new mongoose.Schema({
 
 export interface ISummonerMatches extends mongoose.Document {
     userId?: string,
+    sumId?: string,
     entrie?: string,
     data?: {
       metadata: {
