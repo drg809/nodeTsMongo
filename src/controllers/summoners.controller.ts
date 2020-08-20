@@ -8,6 +8,7 @@ import { summonersStatsModel, ISummonerStats } from '../models/summonerStats';
 import config from '../helpers/config';
 import { usersController } from './users.controller';
 import { summonersMatchesDetailsModel, ISummonerMatchesDetails } from '../models/summonerMatchesDetails';
+import { cpuUsage } from 'process';
 require('dotenv').config();
 
 
@@ -140,12 +141,12 @@ export class summonersController extends Controller {
         try {
             let top1: number = 0; let top2: number = 0; let top3: number = 0; let top4: number = 0; let top5: number = 0; let top6: number = 0; let top7: number = 0; let top8: number = 0;let countsT1 = {};let traitsArrayT4S3 = [];let countsT4S3 = {};
             let champCountTop1 = {};let champCountTotal = {};let champCount = {};let unitsArrayTop1 = [];let unitsArrayTotal = [];let traitsArrayTotal = [];let traitsArrayT4 = [];let traitsArrayT4S1 = [];let traitsArrayT4S2 = [];let countsTotal = {};
-            let countsTop4 = {};let counts = {};let winRateGalaxie = {top1:{},top2:{},top3:{},top4:{},top5:{},top6:{},top7:{},top8:{},top:[]};let w = [];let unitsArray = [];let traitsArrayT1 = [];let countsT4 = {};let countsT4S1 = {};let countsT4S2 = {};
+            let countsTop4 = {};let counts = {};let winRateGalaxie = {top1:{},top2:{},top3:{},top4:{},top5:{},top6:{},top7:{},top8:{},top:[],maxV:0};let w = [];let unitsArray = [];let traitsArrayT1 = [];let countsT4 = {};let countsT4S1 = {};let countsT4S2 = {};
             const auth = usersController.getTokenPayload(req);
             let sum: ISummoner = await summonersModel.findOne({userId: auth.id, main: true});
             let stats: ISummonerStats = await summonersStatsModel.findOne({summonerName:{ $regex : new RegExp(sum.summonerName, "i") }});
             let matches: ISummonerMatchesDetails[] = await summonersMatchesDetailsModel.find({sumId: sum._id, userId: auth.id});
-            stats.positions = {top1: top1,top2: top2,top3: top3,top4: top4,top5: top5,top6: top6,top7: top7,top8: top8, total: matches.length + 1};
+            stats.positions = {top1: top1,top2: top2,top3: top3,top4: top4,top5: top5,top6: top6,top7: top7,top8: top8, total: matches.length, maxV: 0};
             for (const x of matches) {
               switch(x.data.placement){
                 case 1:
@@ -173,7 +174,7 @@ export class summonersController extends Controller {
                   break;
                 case 4:
                   stats.positions.top4++;
-                  winRateGalaxie.top3[x.data.game_variation] = (winRateGalaxie.top3[x.data.game_variation] || 0)+1;
+                  winRateGalaxie.top4[x.data.game_variation] = (winRateGalaxie.top4[x.data.game_variation] || 0)+1;
                   winRateGalaxie.top[x.data.game_variation] = (winRateGalaxie.top[x.data.game_variation] || 0)+1;
                   break;
                 case 5:
@@ -276,10 +277,17 @@ export class summonersController extends Controller {
             for (const y of traitsArrayT4S3) {
               countsT4S3[y.name] = (countsT4S3[y.name] || 0)+1;
             }
+
+            let maxP = stats.positions;
+            maxP.total = 0;
+            stats.positions.maxV = Math.max.apply(null, Object.values(maxP));
+            winRateGalaxie.maxV = Math.max.apply(null, Object.values(counts));
+            const maxC = Math.max.apply(null, Object.values(champCount));
+
             traitsArrayT1.sort((a, b) => b.y - a.y).splice(10, traitsArrayT1.length - 10);
             traitsArrayT4.sort((a, b) => b.y - a.y).splice(10, traitsArrayT4.length - 10);
 
-            stats.count = {top4: countsTop4, perGalaxie: winRateGalaxie, total: counts, champs: { top1: unitsArrayTop1, top4: unitsArray, top4C: champCount, totalC: champCountTotal }, traits: { top1: traitsArrayT1, top4: traitsArrayT4, top4C: countsT4, totalC: countsTotal, top4S1: countsT4S1, top4S2: countsT4S2, top4S3: countsT4S3 }};
+            stats.count = {top4: countsTop4, perGalaxie: winRateGalaxie, total: counts, champs: { top1: unitsArrayTop1, top4: unitsArray, top4C: champCount, maxV: maxC, totalC: champCountTotal }, traits: { top1: traitsArrayT1, top4: traitsArrayT4, top4C: countsT4, totalC: countsTotal, top4S1: countsT4S1, top4S2: countsT4S2, top4S3: countsT4S3 }};
             return stats;
         } catch (err) {
             this.setStatus(204);
