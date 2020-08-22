@@ -253,10 +253,9 @@ export function RegisterRoutes(app: express.Express) {
       const promise = controller.uploadImage.apply(controller, validatedArgs as any);
       promiseHandler(controller, promise, response, next);
     });
-  app.put('/api/v1/profile/:id', [checkJwt],
+  app.put('/api/v1/profile', [checkJwt],
     function(request: any, response: any, next: any) {
       const args = {
-        id: { "in": "path", "name": "id", "required": true, "dataType": "string" },
         userId: { "in": "body-prop", "name": "userId", "unique": true, "required": true, "dataType": "string" },
         name: { "in": "body-prop", "name": "name", "required": true, "dataType": "string" },
         lastname: { "in": "body-prop", "name": "lastname", "required": false, "dataType": "string" },
@@ -530,7 +529,7 @@ export function RegisterRoutes(app: express.Express) {
     function(request: any, response: any, next: any) {
       const args = {
         userId: { "in": "body-prop", "name": "userId", "required": true, "dataType": "string" },
-        id: { "in": "body-prop", "name": "id", "required": true, "dataType": "string" }
+        id: { "in": "body-prop", "name": "_id", "required": true, "dataType": "string" }
       };
       let validatedArgs: any[] = [];
       try {
