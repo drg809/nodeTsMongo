@@ -22,7 +22,7 @@ export class summonersController extends Controller {
         try {
             let items: any[] = await summonersModel.find({deletedAt: { $eq: null }});
             items = items.map((item) => { return {
-                id: item._id,
+                _id: item._id,
                 userId: item.userId,
                 summonerName: item.summonerName,
                 rank: item.rank,
@@ -372,7 +372,7 @@ export class summonersController extends Controller {
         try {
             let items: any[] = await summonersModel.find({userId: id, deletedAt: { $eq: null }});
             items = items.map((item) => { return {
-                id: item._id,
+                _id: item._id,
                 userId: item.userId,
                 summonerName: item.summonerName,
                 rank: item.rank,
