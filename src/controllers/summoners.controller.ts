@@ -338,16 +338,16 @@ export class summonersController extends Controller {
         });
     }
 
-    @Post('/summoners/match_history_paginate/{id}')
+    @Post('/summoners/match_history_paginate')
     public async getMatchHistoryPaginate(req: any) : Promise<any> {
         const resPerPage = 10;
         const page = req.body.page || 1;
         try {
-            let item: ISummonerMatches[] = await summonersMatchesModel.find({sumId: req.body.sumId, userId: req.params.id, 'data.info.queue_id': {$eq: 1100}})
+            let item: ISummonerMatches[] = await summonersMatchesModel.find({sumId: req.body.sumId, 'data.info.queue_id': {$eq: 1100}})
             .sort({'data.info.game_datetime': -1})
             .skip((resPerPage * page) - resPerPage)
             .limit(resPerPage);
-            let numOfProducts = await summonersMatchesModel.count({sumId: req.body.sumId, userId: req.params.id, 'data.info.queue_id': {$eq: 1100}})
+            let numOfProducts = await summonersMatchesModel.count({sumId: req.body.sumId, 'data.info.queue_id': {$eq: 1100}})
             const res = {data: item, pageIndex: page, pageSize: resPerPage, pages: Math.ceil(numOfProducts / resPerPage), numResult: numOfProducts};
             return res;
         } catch (err) {
@@ -356,10 +356,10 @@ export class summonersController extends Controller {
         }
     }
 
-    @Get('/summoners/match_history/{userId}')
-    public async getMatchHistory(@BodyProp('sumId') sumId: string, @BodyProp('userId') userId: string) : Promise<any> {
+    @Get('/summoners/match_history/{sumId}')
+    public async getMatchHistory(@BodyProp('sumId') sumId: string) : Promise<any> {
         try {
-            let item: ISummonerMatches[] = await summonersMatchesModel.find({sumId: sumId, userId: userId, 'data.info.queue_id': {$eq: 1100}}).sort({'data.info.game_datetime': -1});
+            let item: ISummonerMatches[] = await summonersMatchesModel.find({sumId: sumId, 'data.info.queue_id': {$eq: 1100}}).sort({'data.info.game_datetime': -1});
             return item;
         } catch (err) {
             this.setStatus(500);
