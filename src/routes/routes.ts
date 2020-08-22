@@ -334,7 +334,7 @@ export function RegisterRoutes(app: express.Express) {
       const promise = controller.getOne.apply(controller, validatedArgs as any);
       promiseHandler(controller, promise, response, next);
     });
-  app.post('/api/v1/summoners/match_history_paginate/:id', [checkJwt],
+  app.post('/api/v1/summoners/match_history_paginate', [checkJwt],
     function(request: any, response: any, next: any) {
 
       const controller = new summonersController();
@@ -380,11 +380,10 @@ export function RegisterRoutes(app: express.Express) {
       const promise = controller.getByName.apply(controller, validatedArgs as any);
       promiseHandler(controller, promise, response, next);
     });
-  app.get('/api/v1/summoners/match_history/:sumId/:userId', [checkJwt, checkRol],
+  app.get('/api/v1/summoners/match_history/:sumId', [checkJwt, checkRol],
     function(request: any, response: any, next: any) {
       const args = {
-        sumId: { "in": "path", "name": "sumId", "required": true, "dataType": "string" },
-        userId: { "in": "path", "name": "userId", "required": true, "dataType": "string" }
+        sumId: { "in": "path", "name": "sumId", "required": true, "dataType": "string" }
       };
       let validatedArgs: any[] = [];
       try {
