@@ -68,13 +68,23 @@ export class summonersController extends Controller {
         }
     }
 
-    @Put('/summoners/search')
+    @Post('/summoners/stats/search')
     public async searchSummoner(@BodyProp('name') name: string) {
         let num: number = 0;
         try {
-            let item: ISummonerStats = await summonersStatsModel.findOne({ summonerName: { $regex: name, $options: "i" } });
-
-            return item;
+            let items: any[] = await summonersStatsModel.find({ summonerName: { $regex: name, $options: "i" } });
+            items = items.map((item) => { return {
+                leagueId: item.leagueId,
+                summonerId: item.summonerId,
+                summonerName: item.summonerName,
+                queueTyiteme: item.queueType,
+                tier: item.tier,
+                rank: item.rank,
+                leaguePoints: item.leaguePoints,
+                wins: item.wins
+              }
+            });
+            return items;
         } catch (err) {
             this.setStatus(500);
             console.error('Caught error', err);
