@@ -41,7 +41,7 @@ export class summonersController extends Controller {
     @Get('/summoners/{id}')
     public async getOne(id: string) : Promise<any> {
         try {
-            let item: any = await summonersModel.findOne({userId: id, deletedAt: { $eq: null }});
+            let item: any = await summonersModel.findOne({_id: id, deletedAt: { $eq: null }});
             return item;
         } catch (err) {
             this.setStatus(500);
@@ -181,6 +181,7 @@ export class summonersController extends Controller {
             let sum: ISummoner = await summonersModel.findOne({userId: auth.id, main: true});
             let stats: ISummonerStats = await summonersStatsModel.findOne({summonerName:{ $regex : new RegExp(sum.summonerName, "i") }});
             let matches: ISummonerMatchesDetails[] = await summonersMatchesDetailsModel.find({sumId: sum._id, userId: auth.id});
+            console.log(matches.length);
             stats.positions = {top1: top1,top2: top2,top3: top3,top4: top4,top5: top5,top6: top6,top7: top7,top8: top8, total: matches.length, maxV: 0};
             for (const x of matches) {
               switch(x.data.placement){
@@ -318,7 +319,7 @@ export class summonersController extends Controller {
             stats.positions.maxV = Math.max.apply(null, Object.values(maxP));
             winRateGalaxie.maxV = Math.max.apply(null, Object.values(counts));
             const maxC = Math.max.apply(null, Object.values(champCount));
-
+            stats.positions.total = matches.length;
             traitsArrayT1.sort((a, b) => b.y - a.y).splice(10, traitsArrayT1.length - 10);
             traitsArrayT4.sort((a, b) => b.y - a.y).splice(10, traitsArrayT4.length - 10);
 
@@ -455,7 +456,7 @@ export class summonersController extends Controller {
           sum.forEach(ent => {
             setTimeout(async function () {
               let match: ISummonerMatches = await summonersMatchesModel.findOne({entrie: ent.entrie});
-              //if (!match) {
+              if (!match) {
                 api.get('europe', 'tftMatch.getMatch', ent.entrie ).then(res => {
                   data = res;
                   let sumE = new summonersMatchesModel({
@@ -518,7 +519,7 @@ export class summonersController extends Controller {
                   });
                 });
 
-              //}
+              }
             }, 100);
 
           });
