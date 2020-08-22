@@ -361,6 +361,25 @@ export function RegisterRoutes(app: express.Express) {
       const promise = controller.searchSummoner.apply(controller, validatedArgs as any);
       promiseHandler(controller, promise, response, next);
     });
+  app.post('/api/v1/summoners/get_by_name', [checkJwt],
+    function(request: any, response: any, next: any) {
+      const args = {
+        name: { "in": "body-prop", "name": "name", "required": true, "dataType": "string" },
+      };
+
+      let validatedArgs: any[] = [];
+      try {
+        validatedArgs = getValidatedArgs(args, request);
+      } catch (err) {
+        return next(err);
+      }
+
+      const controller = new summonersController();
+
+
+      const promise = controller.getByName.apply(controller, validatedArgs as any);
+      promiseHandler(controller, promise, response, next);
+    });
   app.get('/api/v1/summoners/match_history/:sumId/:userId', [checkJwt, checkRol],
     function(request: any, response: any, next: any) {
       const args = {
