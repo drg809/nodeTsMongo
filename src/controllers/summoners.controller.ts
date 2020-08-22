@@ -91,6 +91,18 @@ export class summonersController extends Controller {
         }
     }
 
+    @Post('/summoners/get_by_name')
+    public async getByName(@BodyProp('name') name: string) {
+        let num: number = 0;
+        try {
+            let item: any = await summonersModel.findOne({ summonerName: { $regex: name, $options: "i" } });
+            return item;
+        } catch (err) {
+            this.setStatus(500);
+            console.error('Caught error', err);
+        }
+    }
+
     @Post('/summoners/leagueEntries_ext')
     public async getEntriesCommonLeagues() {
         try {
