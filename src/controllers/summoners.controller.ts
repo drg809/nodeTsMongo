@@ -172,16 +172,15 @@ export class summonersController extends Controller {
     }
 
     @Post('/summoners/stats')
-    public async getSummonerStats(req: Request) {
+    public async getSummonerStats(req: any) {
         try {
             let top1: number = 0; let top2: number = 0; let top3: number = 0; let top4: number = 0; let top5: number = 0; let top6: number = 0; let top7: number = 0; let top8: number = 0;let countsT1 = {};let traitsArrayT4S3 = [];let countsT4S3 = {};
             let champCountTop1 = {};let champCountTotal = {};let champCount = {};let unitsArrayTop1 = [];let unitsArrayTotal = [];let traitsArrayTotal = [];let traitsArrayT4 = [];let traitsArrayT4S1 = [];let traitsArrayT4S2 = [];let countsTotal = {};
             let countsTop4 = {};let counts = {};let winRateGalaxie = {top1:{},top2:{},top3:{},top4:{},top5:{},top6:{},top7:{},top8:{},top:[],maxV:0};let w = [];let unitsArray = [];let traitsArrayT1 = [];let countsT4 = {};let countsT4S1 = {};let countsT4S2 = {};
             const auth = usersController.getTokenPayload(req);
-            let sum: ISummoner = await summonersModel.findOne({userId: auth.id, main: true});
+            let sum: ISummoner = await summonersModel.findOne({_id: req.body.main});
             let stats: ISummonerStats = await summonersStatsModel.findOne({summonerName:{ $regex : new RegExp(sum.summonerName, "i") }});
-            let matches: ISummonerMatchesDetails[] = await summonersMatchesDetailsModel.find({sumId: sum._id, userId: auth.id});
-            console.log(matches.length);
+            let matches: ISummonerMatchesDetails[] = await summonersMatchesDetailsModel.find({sumId: sum._id});
             stats.positions = {top1: top1,top2: top2,top3: top3,top4: top4,top5: top5,top6: top6,top7: top7,top8: top8, total: matches.length, maxV: 0};
             for (const x of matches) {
               switch(x.data.placement){
