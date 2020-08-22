@@ -342,7 +342,7 @@ export function RegisterRoutes(app: express.Express) {
       const promise = controller.getMatchHistoryPaginate(request);
       promiseHandler(controller, promise, response, next);
     });
-  app.get('/api/v1/summoners/search', [checkJwt],
+  app.post('/api/v1/summoners/stats/search', [checkJwt],
     function(request: any, response: any, next: any) {
       const args = {
         name: { "in": "body-prop", "name": "name", "required": true, "dataType": "string" },
